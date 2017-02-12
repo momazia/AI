@@ -40,4 +40,9 @@ public class Location {
 		Location location = (Location) o;
 		return location.getX() == getX() && location.getY() == getY();
 	}
+
+	@Override
+	public String toString() {
+		return "[" + x + "," + y + "]";
+	}
 }

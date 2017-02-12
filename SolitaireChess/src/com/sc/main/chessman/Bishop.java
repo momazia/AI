@@ -1,17 +1,16 @@
 package com.sc.main.chessman;
 
+import java.util.List;
+
 public class Bishop extends Chessman {
 
 	public Bishop(int x, int y) {
 		super(x, y);
-		// TODO Auto-generated constructor stub
 	}
 
 	@Override
-	public boolean canTakeDown(Chessman boardChessman) {
-		// Location localLocation = getLocation();
-		// Location boardChessmanLocation = boardChessman.getLocation();
-		return false;
+	public List<Chessman> getPossibleVictims(Chessman[] chessmans, int boardSize) {
+		return crossMovement(chessmans, boardSize);
 	}
 
 }

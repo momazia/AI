@@ -7,10 +7,12 @@ import com.sc.main.chessman.Chessman;
 
 public class State {
 
+	private int boardSize;
 	private Chessman[] chessmans;
 
-	public State(Chessman... chessmans) {
+	public State(int boardSize, Chessman... chessmans) {
 		super();
+		this.boardSize = boardSize;
 		this.chessmans = chessmans;
 	}
 
@@ -25,21 +27,36 @@ public class State {
 	public List<State> getPossibleStates() {
 		List<State> result = new ArrayList<>();
 		for (Chessman chessman : chessmans) {
-			List<Chessman> victims = getPossibleVictims(chessman);
+			List<Chessman> victims = chessman.getPossibleVictims(chessmans, boardSize);
 
 		}
 		return result;
 	}
 
-	public List<Chessman> getPossibleVictims(Chessman chessman) {
-		List<Chessman> result = new ArrayList<>();
-		for (Chessman boardChessman : chessmans) {
-			if (!boardChessman.equals(chessman)) {
-				if (chessman.canTakeDown(boardChessman)) {
-					result.add(boardChessman);
+	@Override
+	public String toString() {
+		StringBuffer str = new StringBuffer();
+		for (int y = boardSize; y > 0; y--) {
+			for (int x = 1; x <= boardSize; x++) {
+				String name = getChessmanName(x, y);
+				if (name == null) {
+					str.append("\t");
+				} else {
+					str.append(str);
 				}
 			}
+			str.append("\n");
 		}
-		return result;
+		return str.toString();
 	}
+
+	private String getChessmanName(int x, int y) {
+		for (Chessman chessman : chessmans) {
+			if (chessman.getLocation().getX() == x && chessman.getLocation().getY() == y) {
+				return chessman.getClass().getName();
+			}
+		}
+		return null;
+	}
+
 }
