@@ -56,8 +56,15 @@ public abstract class Chessman {
 		return null;
 	}
 
-	private Chessman upRight(Chessman[] chessmans, int boardSize) {
-		// TODO Auto-generated method stub
+	public Chessman upRight(Chessman[] chessmans, int boardSize) {
+		for (int counter = 1; counter <= boardSize - Math.max(location.getX(), location.getY()); counter++) {
+			for (Chessman boardChessman : chessmans) {
+				if (boardChessman.getLocation().getX() == location.getX() + counter
+						&& boardChessman.getLocation().getY() == location.getY() + counter) {
+					return boardChessman;
+				}
+			}
+		}
 		return null;
 	}
 

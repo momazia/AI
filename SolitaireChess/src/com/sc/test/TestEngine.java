@@ -140,7 +140,43 @@ public class TestEngine {
 
 		List<Chessman> possibleVictims = rook.getPossibleVictims(boardChessmans, 4);
 		assertEquals(0, possibleVictims.size());
+	}
 
+	@Test
+	public void test_getPossibleVictims_UpRight0() {
+		Rook rook = new Rook(2, 2);
+		Chessman[] boardChessmans = new Chessman[] { new Rook(1, 1), rook, new Bishop(2, 2), new Bishop(4, 1), new Rook(3, 2) };
+
+		Chessman upRight = rook.upRight(boardChessmans, 4);
+		assertNull(upRight);
+	}
+
+	@Test
+	public void test_getPossibleVictims_UpRight1() {
+		Rook rook = new Rook(2, 2);
+		Chessman[] boardChessmans = new Chessman[] { new Rook(3, 3), rook, new Bishop(1, 2), new Bishop(2, 1), new Rook(4, 4), new Rook(3, 2) };
+
+		Chessman upRight = rook.upRight(boardChessmans, 4);
+		assertEquals(Rook.class, upRight.getClass());
+		assertEquals(new Location(3, 3), upRight.getLocation());
+	}
+
+	@Test
+	public void test_getPossibleVictims_UpRight2() {
+		Rook rook = new Rook(4, 1);
+		Chessman[] boardChessmans = new Chessman[] { new Rook(1, 2), rook, new Bishop(1, 2), new Bishop(2, 4), new Rook(3, 3), new Rook(3, 2) };
+
+		Chessman upRight = rook.upRight(boardChessmans, 4);
+		assertNull(upRight);
+	}
+
+	@Test
+	public void test_getPossibleVictims_UpRight3() {
+		Rook rook = new Rook(1, 4);
+		Chessman[] boardChessmans = new Chessman[] { new Rook(1, 2), rook, new Bishop(1, 2), new Bishop(2, 4), new Rook(3, 3), new Rook(3, 2) };
+
+		Chessman upRight = rook.upRight(boardChessmans, 4);
+		assertNull(upRight);
 	}
 
 }
