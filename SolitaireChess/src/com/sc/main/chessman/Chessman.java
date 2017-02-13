@@ -42,17 +42,38 @@ public abstract class Chessman {
 	}
 
 	private Chessman downLeft(Chessman[] chessmans, int boardSize) {
-		// TODO Auto-generated method stub
+		for (int counter = 1; counter <= boardSize - Math.min(location.getX(), location.getY()); counter++) {
+			for (Chessman boardChessman : chessmans) {
+				if (boardChessman.getLocation().getX() == location.getX() - counter
+						&& boardChessman.getLocation().getY() == location.getY() - counter) {
+					return boardChessman;
+				}
+			}
+		}
 		return null;
 	}
 
-	private Chessman downRight(Chessman[] chessmans, int boardSize) {
-		// TODO Auto-generated method stub
+	public Chessman downRight(Chessman[] chessmans, int boardSize) {
+		for (int counter = 1; counter <= boardSize - Math.min(location.getX(), location.getY()); counter++) {
+			for (Chessman boardChessman : chessmans) {
+				if (boardChessman.getLocation().getX() == location.getX() + counter
+						&& boardChessman.getLocation().getY() == location.getY() - counter) {
+					return boardChessman;
+				}
+			}
+		}
 		return null;
 	}
 
-	private Chessman upLeft(Chessman[] chessmans, int boardSize) {
-		// TODO Auto-generated method stub
+	public Chessman upLeft(Chessman[] chessmans, int boardSize) {
+		for (int counter = 1; counter <= boardSize - Math.min(location.getX(), location.getY()); counter++) {
+			for (Chessman boardChessman : chessmans) {
+				if (boardChessman.getLocation().getX() == location.getX() - counter
+						&& boardChessman.getLocation().getY() == location.getY() + counter) {
+					return boardChessman;
+				}
+			}
+		}
 		return null;
 	}
 
