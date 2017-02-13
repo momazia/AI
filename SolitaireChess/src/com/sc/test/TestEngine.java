@@ -10,7 +10,9 @@ import org.junit.Test;
 import com.sc.main.chessman.Bishop;
 import com.sc.main.chessman.Chessman;
 import com.sc.main.chessman.King;
+import com.sc.main.chessman.Knight;
 import com.sc.main.chessman.Location;
+import com.sc.main.chessman.Pawn;
 import com.sc.main.chessman.Queen;
 import com.sc.main.chessman.Rook;
 
@@ -205,6 +207,64 @@ public class TestEngine {
 		Chessman[] boardChessmans = new Chessman[] { new Bishop(4, 4), new Bishop(4, 2), queen, new Bishop(1, 1), new Bishop(3, 1) };
 
 		List<Chessman> possibleVictims = queen.getPossibleVictims(boardChessmans, 4);
+		assertEquals(0, possibleVictims.size());
+	}
+
+	@Test
+	public void test_getPossibleVictimsPawn0() {
+		Pawn pawn = new Pawn(3, 2);
+		Chessman[] boardChessmans = new Chessman[] { new Bishop(1, 4), new Bishop(2, 4), new Bishop(3, 4), pawn, new Bishop(3, 3), new Queen(1, 3),
+				new Rook(2, 3), new Rook(4, 3), new Rook(1, 1), new Rook(2, 1) };
+
+		List<Chessman> possibleVictims = pawn.getPossibleVictims(boardChessmans, 4);
+		assertEquals(2, possibleVictims.size());
+
+		assertEquals(Rook.class, possibleVictims.get(0).getClass());
+		assertEquals(new Location(2, 3), possibleVictims.get(0).getLocation());
+
+		assertEquals(Rook.class, possibleVictims.get(1).getClass());
+		assertEquals(new Location(4, 3), possibleVictims.get(1).getLocation());
+	}
+
+	@Test
+	public void test_getPossibleVictimsPawn1() {
+		Pawn pawn = new Pawn(1, 4);
+		Chessman[] boardChessmans = new Chessman[] { new Bishop(2, 4), new Bishop(3, 4), pawn, new Bishop(3, 3), new Queen(1, 3), new Rook(2, 3),
+				new Rook(4, 3), new Rook(1, 1), new Rook(2, 1) };
+
+		List<Chessman> possibleVictims = pawn.getPossibleVictims(boardChessmans, 4);
+		assertEquals(0, possibleVictims.size());
+	}
+
+	@Test
+	public void test_getPossibleVictimsKnight0() {
+		Knight knight = new Knight(2, 3);
+		Chessman[] boardChessmans = new Chessman[] { new Bishop(4, 4), new Bishop(4, 2), new Bishop(1, 1), knight, new Queen(3, 1), new Queen(2, 1),
+				new Rook(2, 4), new Rook(1, 4) };
+
+		List<Chessman> possibleVictims = knight.getPossibleVictims(boardChessmans, 4);
+		assertEquals(4, possibleVictims.size());
+
+		assertEquals(Bishop.class, possibleVictims.get(0).getClass());
+		assertEquals(new Location(4, 4), possibleVictims.get(0).getLocation());
+
+		assertEquals(Bishop.class, possibleVictims.get(1).getClass());
+		assertEquals(new Location(4, 2), possibleVictims.get(1).getLocation());
+
+		assertEquals(Bishop.class, possibleVictims.get(2).getClass());
+		assertEquals(new Location(1, 1), possibleVictims.get(2).getLocation());
+
+		assertEquals(Queen.class, possibleVictims.get(3).getClass());
+		assertEquals(new Location(3, 1), possibleVictims.get(3).getLocation());
+	}
+
+	@Test
+	public void test_getPossibleVictimsKnight1() {
+		Knight knight = new Knight(4, 1);
+		Chessman[] boardChessmans = new Chessman[] { new Bishop(4, 4), new Bishop(4, 2), new Bishop(1, 1), knight, new Queen(3, 1), new Queen(2, 1),
+				new Rook(2, 4), new Rook(1, 4) };
+
+		List<Chessman> possibleVictims = knight.getPossibleVictims(boardChessmans, 4);
 		assertEquals(0, possibleVictims.size());
 	}
 
