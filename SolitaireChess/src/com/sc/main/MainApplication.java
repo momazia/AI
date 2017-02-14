@@ -57,23 +57,21 @@ public class MainApplication {
 			// Creating a new engine
 			Engine engine = new Engine(puzzle.getFrontier());
 			List<State> result = null;
-			if (puzzle.isIterative()) {
-				// Solving the problem iteratively
-				result = engine.solveIteratively(puzzle.getBoardSize(), puzzle.getChessmen());
-				// Printing the result
-				printResult(puzzle, result);
-			} else {
-				// Initializing the values
-				engine.initiate(puzzle.getBoardSize(), puzzle.getChessmen());
-				try {
+			try {
+				if (puzzle.isIterative()) {
+					// Solving the problem iteratively
+					result = engine.solveIteratively(puzzle.getBoardSize(), puzzle.getChessmen());
+				} else {
+					// Initializing the values
+					engine.initiate(puzzle.getBoardSize(), puzzle.getChessmen());
 					// Solving the puzzle
 					result = engine.solve();
-					// Printing the result
-					printResult(puzzle, result);
-				} catch (NoSolutionFoundException e) {
-					// If no solution found!
-					System.out.println("No solution found! Total number of nodes visited: " + e.getExploredStates().size());
 				}
+				// Printing the result
+				printResult(puzzle, result);
+			} catch (NoSolutionFoundException e) {
+				// If no solution found!
+				System.out.println(puzzle + ". NO SOLUTION FOUND! Total number of nodes visited: " + e.getExploredStates().size());
 			}
 		}
 	}

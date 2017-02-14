@@ -59,8 +59,10 @@ public class Engine {
 	 * @return The number of total states visited.
 	 * @throws InstantiationException
 	 * @throws IllegalAccessException
+	 * @throws NoSolutionFoundException
 	 */
-	public List<State> solveIteratively(int boardSize, Chessman[] chessmen) throws InstantiationException, IllegalAccessException {
+	public List<State> solveIteratively(int boardSize, Chessman[] chessmen)
+			throws InstantiationException, IllegalAccessException, NoSolutionFoundException {
 		// Instantiating the initial values
 		int counter = 0;
 		List<State> solution = null;
@@ -76,11 +78,17 @@ public class Engine {
 				// Adding all the found solutions
 				result.addAll(solution);
 			} catch (NoSolutionFoundException e) {
-				// When no result is found, add all those steps which were explored, looking for the answer.
+				// Checking to see if we might have gotten stuck by comparing what we have explored so far compare to
+				// the last run. If they are the same, that means we have reach to the end of the tree and increasing
+				// the counter won't help.
+				if (result.containsAll(e.getExploredStates())) {
+					throw e;
+				}
+				// When no result is found, add all those steps which were explored so far.
 				result.addAll(e.getExploredStates());
 			}
 			counter++;
-			// If solution is null, it means nothing is found. Continue the search.
+			// If solution is null, it means nothing is found.
 		} while (solution == null);
 		return result;
 	}
