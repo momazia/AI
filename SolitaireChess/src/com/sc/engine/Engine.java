@@ -22,6 +22,19 @@ public class Engine {
 		return solve(null);
 	}
 
+	public List<State> solveIteratively(int boardSize, Chessman[] chessmen) throws InstantiationException, IllegalAccessException {
+		int counter = 0;
+		List<State> solution = null;
+		State initialState = new State(boardSize, 0, chessmen);
+		do {
+			frontier = frontier.getClass().newInstance();
+			frontier.addState(initialState);
+			solution = solve(counter);
+			counter++;
+		} while (solution == null);
+		return solution;
+	}
+
 	public List<State> solve(Integer maxDepthLimit) throws InstantiationException, IllegalAccessException {
 		List<State> result = new ArrayList<>();
 		while (!frontier.isEmpty()) {
