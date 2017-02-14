@@ -1,9 +1,6 @@
 package com.sc.test;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertNull;
-import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.*;
 
 import java.util.Arrays;
 import java.util.List;
@@ -14,6 +11,7 @@ import com.sc.engine.AStarFrontier;
 import com.sc.engine.BFSFrontier;
 import com.sc.engine.DFSFrontier;
 import com.sc.engine.Engine;
+import com.sc.engine.NoSolutionFoundException;
 import com.sc.engine.State;
 import com.sc.main.chessman.Bishop;
 import com.sc.main.chessman.Chessman;
@@ -503,7 +501,7 @@ public class TestEngine {
 	}
 
 	@Test
-	public void test_solve_notEmpty() throws InstantiationException, IllegalAccessException {
+	public void test_solve_notEmpty() throws InstantiationException, IllegalAccessException, NoSolutionFoundException {
 		Engine engine = new Engine(BFSFrontier.class);
 		Chessman[] chessmen = new Chessman[] { new Pawn(2, 3), new Bishop(4, 1) };
 		engine.initiate(4, chessmen);
@@ -514,7 +512,7 @@ public class TestEngine {
 	}
 
 	@Test
-	public void test_BFSFrontier_solve_problem1() throws InstantiationException, IllegalAccessException {
+	public void test_BFSFrontier_solve_problem1() throws InstantiationException, IllegalAccessException, NoSolutionFoundException {
 		Engine engine = new Engine(BFSFrontier.class);
 		Chessman[] chessmen = new Chessman[] { new Bishop(2, 3), new Rook(1, 2), new Pawn(2, 2), new Knight(4, 1) };
 		engine.initiate(4, chessmen);
@@ -527,7 +525,7 @@ public class TestEngine {
 	}
 
 	@Test
-	public void test_BFSFrontier_solve_problem2() throws InstantiationException, IllegalAccessException {
+	public void test_BFSFrontier_solve_problem2() throws InstantiationException, IllegalAccessException, NoSolutionFoundException {
 		Engine engine = new Engine(BFSFrontier.class);
 		Chessman[] chessmen = new Chessman[] { new Bishop(1, 1), new Bishop(2, 3), new Queen(3, 4), new Knight(4, 4) };
 		engine.initiate(4, chessmen);
@@ -540,7 +538,7 @@ public class TestEngine {
 	}
 
 	@Test
-	public void test_BFSFrontier_solve_problem3() throws InstantiationException, IllegalAccessException {
+	public void test_BFSFrontier_solve_problem3() throws InstantiationException, IllegalAccessException, NoSolutionFoundException {
 		Engine engine = new Engine(BFSFrontier.class);
 		Chessman[] chessmen = new Chessman[] { new Bishop(1, 4), new Knight(3, 4), new Knight(1, 3), new Queen(2, 3), new Pawn(2, 1) };
 		engine.initiate(4, chessmen);
@@ -555,21 +553,33 @@ public class TestEngine {
 	}
 
 	@Test
-	public void test_LimitedDFSFrontier_solve_problem1() throws InstantiationException, IllegalAccessException {
+	public void test_LimitedDFSFrontier_solve_problem1() throws InstantiationException, IllegalAccessException, NoSolutionFoundException {
 		Engine engine = new Engine(DFSFrontier.class);
 		Chessman[] chessmen = new Chessman[] { new Bishop(2, 3), new Rook(1, 2), new Pawn(2, 2), new Knight(4, 1) };
 
 		engine.initiate(4, chessmen);
-		List<State> states = engine.solve(0);
-		assertNull(states);
+		List<State> states;
+		try {
+			states = engine.solve(0);
+			fail("States must be null");
+		} catch (NoSolutionFoundException e) {
+			// OK
+		}
 
 		engine.initiate(4, chessmen);
-		states = engine.solve(1);
-		assertNull(states);
+		try {
+			states = engine.solve(1);
+			fail("States must be null");
+		} catch (NoSolutionFoundException e) {
+			// OK
+		}
 
-		engine.initiate(4, chessmen);
-		states = engine.solve(2);
-		assertNull(states);
+		try {
+			states = engine.solve(2);
+			fail("States must be null");
+		} catch (NoSolutionFoundException e) {
+			// OK
+		}
 
 		engine.initiate(4, chessmen);
 		states = engine.solve(3);
@@ -581,21 +591,34 @@ public class TestEngine {
 	}
 
 	@Test
-	public void test_LimitedDFSFrontier_solve_problem2() throws InstantiationException, IllegalAccessException {
+	public void test_LimitedDFSFrontier_solve_problem2() throws InstantiationException, IllegalAccessException, NoSolutionFoundException {
 		Engine engine = new Engine(DFSFrontier.class);
 		Chessman[] chessmen = new Chessman[] { new Bishop(1, 1), new Bishop(2, 3), new Queen(3, 4), new Knight(4, 4) };
 
 		engine.initiate(4, chessmen);
-		List<State> states = engine.solve(0);
-		assertNull(states);
+		List<State> states;
+		try {
+			states = engine.solve(0);
+			fail("States must be null");
+		} catch (NoSolutionFoundException e) {
+			// OK
+		}
 
 		engine.initiate(4, chessmen);
-		states = engine.solve(1);
-		assertNull(states);
+		try {
+			states = engine.solve(1);
+			fail("States must be null");
+		} catch (NoSolutionFoundException e) {
+			// OK
+		}
 
 		engine.initiate(4, chessmen);
-		states = engine.solve(2);
-		assertNull(states);
+		try {
+			states = engine.solve(2);
+			fail("States must be null");
+		} catch (NoSolutionFoundException e) {
+			// OK
+		}
 
 		engine.initiate(4, chessmen);
 		states = engine.solve(3);
@@ -609,25 +632,42 @@ public class TestEngine {
 	}
 
 	@Test
-	public void test_LimitedDFSFrontier_solve_problem3() throws InstantiationException, IllegalAccessException {
+	public void test_LimitedDFSFrontier_solve_problem3() throws InstantiationException, IllegalAccessException, NoSolutionFoundException {
 		Engine engine = new Engine(DFSFrontier.class);
 		Chessman[] chessmen = new Chessman[] { new Bishop(1, 4), new Knight(3, 4), new Knight(1, 3), new Queen(2, 3), new Pawn(2, 1) };
 
 		engine.initiate(4, chessmen);
-		List<State> states = engine.solve(0);
-		assertNull(states);
+		List<State> states;
+		try {
+			states = engine.solve(0);
+			fail("States must be null");
+		} catch (NoSolutionFoundException e) {
+			// OK
+		}
 
 		engine.initiate(4, chessmen);
-		states = engine.solve(1);
-		assertNull(states);
+		try {
+			states = engine.solve(1);
+			fail("States must be null");
+		} catch (NoSolutionFoundException e) {
+			// OK
+		}
 
 		engine.initiate(4, chessmen);
-		states = engine.solve(2);
-		assertNull(states);
+		try {
+			states = engine.solve(2);
+			fail("States must be null");
+		} catch (NoSolutionFoundException e) {
+			// OK
+		}
 
 		engine.initiate(4, chessmen);
-		states = engine.solve(3);
-		assertNull(states);
+		try {
+			states = engine.solve(3);
+			fail("States must be null");
+		} catch (NoSolutionFoundException e) {
+			// OK
+		}
 
 		engine.initiate(4, chessmen);
 		states = engine.solve(4);
@@ -691,12 +731,16 @@ public class TestEngine {
 		Engine engine = new Engine(DFSFrontier.class);
 		Chessman[] chessmen = new Chessman[] { new Bishop(2, 3), new Bishop(3, 3) };
 		engine.initiate(4, chessmen);
-		List<State> states = engine.solve();
-		assertNull(states);
+		try {
+			engine.solve(0);
+			fail("States must be null");
+		} catch (NoSolutionFoundException e) {
+			// OK
+		}
 	}
 
 	@Test
-	public void test_DFSFrontier_solve_problem1() throws InstantiationException, IllegalAccessException {
+	public void test_DFSFrontier_solve_problem1() throws InstantiationException, IllegalAccessException, NoSolutionFoundException {
 		Engine engine = new Engine(DFSFrontier.class);
 		Chessman[] chessmen = new Chessman[] { new Bishop(2, 3), new Rook(1, 2), new Pawn(2, 2), new Knight(4, 1) };
 		engine.initiate(4, chessmen);
@@ -709,7 +753,7 @@ public class TestEngine {
 	}
 
 	@Test
-	public void test_DFSFrontier_solve_problem2() throws InstantiationException, IllegalAccessException {
+	public void test_DFSFrontier_solve_problem2() throws InstantiationException, IllegalAccessException, NoSolutionFoundException {
 		Engine engine = new Engine(DFSFrontier.class);
 		Chessman[] chessmen = new Chessman[] { new Bishop(1, 1), new Bishop(2, 3), new Queen(3, 4), new Knight(4, 4) };
 		engine.initiate(4, chessmen);
@@ -722,7 +766,7 @@ public class TestEngine {
 	}
 
 	@Test
-	public void test_DFSFrontier_solve_problem3() throws InstantiationException, IllegalAccessException {
+	public void test_DFSFrontier_solve_problem3() throws InstantiationException, IllegalAccessException, NoSolutionFoundException {
 		Engine engine = new Engine(DFSFrontier.class);
 		Chessman[] chessmen = new Chessman[] { new Bishop(1, 4), new Knight(3, 4), new Knight(1, 3), new Queen(2, 3), new Pawn(2, 1) };
 		engine.initiate(4, chessmen);
@@ -737,7 +781,7 @@ public class TestEngine {
 	}
 
 	@Test
-	public void test_AStarFrontier_solve_problem1() throws InstantiationException, IllegalAccessException {
+	public void test_AStarFrontier_solve_problem1() throws InstantiationException, IllegalAccessException, NoSolutionFoundException {
 		Engine engine = new Engine(AStarFrontier.class);
 		Chessman[] chessmen = new Chessman[] { new Bishop(2, 3), new Rook(1, 2), new Pawn(2, 2), new Knight(4, 1) };
 		engine.initiate(4, chessmen);
@@ -750,7 +794,7 @@ public class TestEngine {
 	}
 
 	@Test
-	public void test_AStarFrontier_solve_problem2() throws InstantiationException, IllegalAccessException {
+	public void test_AStarFrontier_solve_problem2() throws InstantiationException, IllegalAccessException, NoSolutionFoundException {
 		Engine engine = new Engine(AStarFrontier.class);
 		Chessman[] chessmen = new Chessman[] { new Bishop(1, 1), new Bishop(2, 3), new Queen(3, 4), new Knight(4, 4) };
 		engine.initiate(4, chessmen);
@@ -763,7 +807,7 @@ public class TestEngine {
 	}
 
 	@Test
-	public void test_AStarFrontier_solve_problem3() throws InstantiationException, IllegalAccessException {
+	public void test_AStarFrontier_solve_problem3() throws InstantiationException, IllegalAccessException, NoSolutionFoundException {
 		Engine engine = new Engine(AStarFrontier.class);
 		Chessman[] chessmen = new Chessman[] { new Bishop(1, 4), new Knight(3, 4), new Knight(1, 3), new Queen(2, 3), new Pawn(2, 1) };
 		engine.initiate(4, chessmen);

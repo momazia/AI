@@ -18,24 +18,30 @@ public class Engine {
 		frontier.addState(initialState);
 	}
 
-	public List<State> solve() throws InstantiationException, IllegalAccessException {
+	public List<State> solve() throws InstantiationException, IllegalAccessException, NoSolutionFoundException {
 		return solve(null);
 	}
 
 	public List<State> solveIteratively(int boardSize, Chessman[] chessmen) throws InstantiationException, IllegalAccessException {
 		int counter = 0;
 		List<State> solution = null;
+		List<State> result = new ArrayList<>();
 		State initialState = new State(boardSize, 0, chessmen);
 		do {
 			frontier = frontier.getClass().newInstance();
 			frontier.addState(initialState);
-			solution = solve(counter);
+			try {
+				solution = solve(counter);
+				result.addAll(solution);
+			} catch (NoSolutionFoundException e) {
+				result.addAll(e.getExploredStates());
+			}
 			counter++;
 		} while (solution == null);
-		return solution;
+		return result;
 	}
 
-	public List<State> solve(Integer maxDepthLimit) throws InstantiationException, IllegalAccessException {
+	public List<State> solve(Integer maxDepthLimit) throws InstantiationException, IllegalAccessException, NoSolutionFoundException {
 		List<State> result = new ArrayList<>();
 		while (!frontier.isEmpty()) {
 			State currentState = frontier.pop();
@@ -51,7 +57,7 @@ public class Engine {
 				frontier.addState(state);
 			}
 		}
-		return null;
+		throw new NoSolutionFoundException(result);
 	}
 
 }
