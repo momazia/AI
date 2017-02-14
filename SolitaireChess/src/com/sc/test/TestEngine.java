@@ -778,6 +778,44 @@ public class TestEngine {
 	}
 
 	@Test
+	public void test_Iterative_AStarFrontier_solve_problem1() throws InstantiationException, IllegalAccessException {
+		Engine engine = new Engine(AStarFrontier.class);
+		Chessman[] chessmen = new Chessman[] { new Bishop(2, 3), new Rook(1, 2), new Pawn(2, 2), new Knight(4, 1) };
+		List<State> states = engine.solveIteratively(4, chessmen);
+		System.out.println("Problem 1 using [" + AStarFrontier.class.getSimpleName() + "] with iterative limitation: " + states.size());
+		assertTrue(states.contains(new State(4, new Chessman[] { new Bishop(2, 3), new Rook(1, 2), new Pawn(2, 2), new Knight(4, 1) })));
+		assertTrue(states.contains(new State(4, new Chessman[] { new Bishop(2, 3), new Rook(1, 2), new Knight(2, 2) })));
+		assertTrue(states.contains(new State(4, new Chessman[] { new Bishop(2, 3), new Rook(2, 2) })));
+		assertTrue(states.contains(new State(4, new Chessman[] { new Rook(2, 3) })));
+	}
+
+	@Test
+	public void test_Iterative_AStarFrontier_solve_problem2() throws InstantiationException, IllegalAccessException {
+		Engine engine = new Engine(AStarFrontier.class);
+		Chessman[] chessmen = new Chessman[] { new Bishop(1, 1), new Bishop(2, 3), new Queen(3, 4), new Knight(4, 4) };
+		List<State> states = engine.solveIteratively(4, chessmen);
+		System.out.println("Problem 2 using [" + AStarFrontier.class.getSimpleName() + "] with iterative limitation: " + states.size());
+		assertTrue(states.contains(new State(4, new Chessman[] { new Bishop(1, 1), new Bishop(2, 3), new Queen(3, 4), new Knight(4, 4) })));
+		assertTrue(states.contains(new State(4, new Chessman[] { new Bishop(1, 1), new Queen(2, 3), new Knight(4, 4) })));
+		assertTrue(states.contains(new State(4, new Chessman[] { new Bishop(1, 1), new Knight(2, 3) })));
+		assertTrue(states.contains(new State(4, new Chessman[] { new Knight(1, 1) })));
+	}
+
+	@Test
+	public void test_Iterative_AStarFrontier_solve_problem3() throws InstantiationException, IllegalAccessException {
+		Engine engine = new Engine(AStarFrontier.class);
+		Chessman[] chessmen = new Chessman[] { new Bishop(1, 4), new Knight(3, 4), new Knight(1, 3), new Queen(2, 3), new Pawn(2, 1) };
+		List<State> states = engine.solveIteratively(4, chessmen);
+		System.out.println("Problem 3 using [" + AStarFrontier.class.getSimpleName() + "] with iterative limitation: " + states.size());
+		assertTrue(states
+				.contains(new State(4, new Chessman[] { new Bishop(1, 4), new Knight(3, 4), new Knight(1, 3), new Queen(2, 3), new Pawn(2, 1) })));
+		assertTrue(states.contains(new State(4, new Chessman[] { new Queen(1, 4), new Knight(3, 4), new Knight(1, 3), new Pawn(2, 1) })));
+		assertTrue(states.contains(new State(4, new Chessman[] { new Knight(3, 4), new Queen(1, 3), new Pawn(2, 1) })));
+		assertTrue(states.contains(new State(4, new Chessman[] { new Knight(1, 3), new Pawn(2, 1) })));
+		assertTrue(states.contains(new State(4, new Chessman[] { new Knight(2, 1) })));
+	}
+
+	@Test
 	public void test_isGoal() {
 		assertFalse(new State(4, new Chessman[] { new Bishop(2, 3), new Rook(2, 1), new Pawn(2, 2), new Knight(4, 1) }).isGoal());
 		assertTrue(new State(4, new Chessman[] {}).isGoal());
