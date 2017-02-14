@@ -48,7 +48,7 @@ public abstract class Chessman {
 		return result;
 	}
 
-	private Chessman downLeft(List<Chessman> chessmen, int boardSize) {
+	public Chessman downLeft(List<Chessman> chessmen, int boardSize) {
 		for (int counter = 1; counter <= boardSize - Math.min(getLocation().getX(), getLocation().getY()); counter++) {
 			for (Chessman boardChessman : chessmen) {
 				if (boardChessman.getLocation().getX() == getLocation().getX() - counter

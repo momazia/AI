@@ -178,7 +178,7 @@ public class TestEngine {
 	@Test
 	public void test_getPossibleVictimsBishop2() {
 		Bishop bishop = new Bishop(2, 3);
-		List<Chessman> boardChessmen = Arrays.asList(new Chessman[] { new Rook(1, 2), new Pawn(2, 2), bishop, new Knight(4, 1) });
+		List<Chessman> boardChessmen = Arrays.asList(new Chessman[] { bishop, new Rook(1, 2), new Pawn(2, 2), new Knight(4, 1) });
 		List<Chessman> possibleVictims = bishop.getPossibleVictims(boardChessmen, 4);
 		assertEquals(2, possibleVictims.size());
 
@@ -424,6 +424,44 @@ public class TestEngine {
 	}
 
 	@Test
+	public void test_getPossibleVictims_DownLeft0() {
+		Bishop bishop = new Bishop(2, 2);
+		List<Chessman> boardChessmen = Arrays.asList(new Chessman[] { new Rook(2, 1), bishop, new Bishop(2, 3), new Bishop(4, 1), new Rook(3, 2) });
+
+		Chessman downLeft = bishop.downLeft(boardChessmen, 4);
+		assertNull(downLeft);
+	}
+
+	@Test
+	public void test_getPossibleVictims_DownLeft1() {
+		Bishop bishop = new Bishop(2, 2);
+		List<Chessman> boardChessmen = Arrays.asList(new Chessman[] { new Rook(1, 1), bishop, new Bishop(2, 3), new Bishop(4, 1), new Rook(3, 2) });
+
+		Chessman downLeft = bishop.downLeft(boardChessmen, 4);
+		assertEquals(Rook.class, downLeft.getClass());
+		assertEquals(new Location(1, 1), downLeft.getLocation());
+	}
+
+	@Test
+	public void test_getPossibleVictims_DownLeft2() {
+		Bishop bishop = new Bishop(4, 1);
+		List<Chessman> boardChessmen = Arrays.asList(new Chessman[] { bishop, new Rook(2, 3), new Bishop(1, 4), new Bishop(2, 4), new Rook(3, 3) });
+
+		Chessman downLeft = bishop.downLeft(boardChessmen, 4);
+		assertNull(downLeft);
+	}
+
+	@Test
+	public void test_getPossibleVictims_DownLeft3() {
+		Bishop bishop = new Bishop(3, 3);
+		List<Chessman> boardChessmen = Arrays.asList(new Chessman[] { new Rook(1, 1), bishop, new Bishop(2, 2), new Bishop(2, 4), new Rook(4, 1) });
+
+		Chessman downLeft = bishop.downLeft(boardChessmen, 4);
+		assertEquals(Bishop.class, downLeft.getClass());
+		assertEquals(new Location(2, 2), downLeft.getLocation());
+	}
+
+	@Test
 	public void test_getPossibleStates() throws InstantiationException, IllegalAccessException {
 		Chessman[] chessmen = new Chessman[] { new Pawn(2, 3), new Bishop(4, 1) };
 		State currentState = new State(4, chessmen);
@@ -446,12 +484,17 @@ public class TestEngine {
 
 	@Test
 	public void test_getPossibleStates0() throws InstantiationException, IllegalAccessException {
-		State state = new State(4, new Chessman[] { new Bishop(2, 3), new Rook(2, 1), new Pawn(2, 2), new Knight(4, 1) });
+		State state = new State(4, new Chessman[] { new Bishop(2, 3), new Rook(1, 2), new Pawn(2, 2), new Knight(4, 1) });
 		List<State> possibleStates = state.getPossibleStates();
-		for (State possibleState : possibleStates) {
-			System.out.println(possibleState);
-		}
-		fail("Fix: Bishop: [2,3] Pawn: [2,2] Rook: [4,1] ");
+		assertEquals(4, possibleStates.size());
+		// Bishop
+		assertTrue(possibleStates.contains(new State(4, new Chessman[] { new Bishop(1, 2), new Pawn(2, 2), new Knight(4, 1) })));
+		assertTrue(possibleStates.contains(new State(4, new Chessman[] { new Bishop(4, 1), new Pawn(2, 2), new Rook(1, 2) })));
+		// Rook
+		assertTrue(possibleStates.contains(new State(4, new Chessman[] { new Bishop(2, 3), new Rook(2, 2), new Knight(4, 1) })));
+		// Pawn = no moves
+		// Knight
+		assertTrue(possibleStates.contains(new State(4, new Chessman[] { new Bishop(2, 3), new Rook(1, 2), new Knight(2, 2) })));
 	}
 
 	@Test
@@ -468,17 +511,17 @@ public class TestEngine {
 	@Test
 	public void test_solve_problem1() throws InstantiationException, IllegalAccessException {
 		Engine engine = new Engine(BFSFrontier.class);
-		Chessman[] chessmen = new Chessman[] { new Bishop(2, 3), new Rook(2, 1), new Pawn(2, 2), new Knight(4, 1) };
+		Chessman[] chessmen = new Chessman[] { new Bishop(2, 3), new Rook(1, 2), new Pawn(2, 2), new Knight(4, 1) };
 		engine.initiate(4, chessmen);
 		List<State> states = engine.solve();
-		for (State state : states) {
-			System.out.println(state);
-		}
-		assertEquals(4, states.size());
-		assertEquals(new State(4, new Chessman[] { new Bishop(2, 3), new Rook(2, 1), new Pawn(2, 2), new Knight(4, 1) }), states.get(0));
-		assertEquals(new State(4, new Chessman[] { new Bishop(2, 3), new Rook(2, 1), new Knight(2, 2) }), states.get(1));
-		assertEquals(new State(4, new Chessman[] { new Bishop(2, 3), new Rook(2, 2) }), states.get(2));
-		assertEquals(new State(4, new Chessman[] { new Rook(2, 3) }), states.get(3));
+		// for (State state : states) {
+		// System.out.println(state);
+		// }
+		assertEquals(13, states.size());
+		assertTrue(states.contains(new State(4, new Chessman[] { new Bishop(2, 3), new Rook(1, 2), new Pawn(2, 2), new Knight(4, 1) })));
+		assertTrue(states.contains(new State(4, new Chessman[] { new Bishop(2, 3), new Rook(1, 2), new Knight(2, 2) })));
+		assertTrue(states.contains(new State(4, new Chessman[] { new Bishop(2, 3), new Rook(2, 2) })));
+		assertTrue(states.contains(new State(4, new Chessman[] { new Rook(2, 3) })));
 	}
 
 	@Test
@@ -491,7 +534,7 @@ public class TestEngine {
 	@Test
 	public void test_stateToString() {
 		Chessman[] chessmen = new Chessman[] { new Pawn(2, 3), new Bishop(1, 4) };
-		System.out.println(new State(4, chessmen));
+		assertEquals("Pawn: [2,3] Bishop: [1,4] ", new State(4, chessmen).toString());
 	}
 
 	@Test
