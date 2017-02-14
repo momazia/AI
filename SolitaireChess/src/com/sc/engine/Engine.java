@@ -14,19 +14,27 @@ public class Engine {
 	}
 
 	public void initiate(int boardSize, Chessman... chessmen) {
-		State initialState = new State(boardSize, chessmen);
+		State initialState = new State(boardSize, 0, chessmen);
 		frontier.addState(initialState);
 	}
 
 	public List<State> solve() throws InstantiationException, IllegalAccessException {
+		return solve(null);
+	}
+
+	public List<State> solve(Integer maxDepthLimit) throws InstantiationException, IllegalAccessException {
 		List<State> result = new ArrayList<>();
 		while (!frontier.isEmpty()) {
 			State currentState = frontier.pop();
+			if (maxDepthLimit != null && currentState.getLevel() > maxDepthLimit) {
+				continue;
+			}
 			result.add(currentState);
 			if (currentState.isGoal()) {
 				return result;
 			}
 			for (State state : currentState.getPossibleStates()) {
+				state.setLevel(currentState.getLevel() + 1);
 				frontier.addState(state);
 			}
 		}

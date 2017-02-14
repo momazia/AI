@@ -10,11 +10,19 @@ public class State {
 
 	private int boardSize;
 	private List<Chessman> chessmen;
+	private Integer level;
 
 	public State(int boardSize, Chessman... chessmen) {
 		super();
 		this.boardSize = boardSize;
 		this.chessmen = Arrays.asList(chessmen);
+	}
+
+	public State(int boardSize, Integer level, Chessman... chessmen) {
+		super();
+		this.boardSize = boardSize;
+		this.chessmen = Arrays.asList(chessmen);
+		this.level = level;
 	}
 
 	public List<Chessman> getChessmen() {
@@ -68,6 +76,7 @@ public class State {
 	@Override
 	public String toString() {
 		StringBuffer str = new StringBuffer();
+		str.append("Level[" + getLevel() + "]: ");
 		for (Chessman chessman : chessmen) {
 			str.append(chessman.toString() + " ");
 		}
@@ -89,5 +98,13 @@ public class State {
 
 	public boolean isGoal() {
 		return chessmen.size() <= 1;
+	}
+
+	public Integer getLevel() {
+		return level;
+	}
+
+	public void setLevel(Integer level) {
+		this.level = level;
 	}
 }

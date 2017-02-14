@@ -554,6 +554,103 @@ public class TestEngine {
 	}
 
 	@Test
+	public void test_LimitedDFSFrontier_solve_problem1() throws InstantiationException, IllegalAccessException {
+		Engine engine = new Engine(DFSFrontier.class);
+		Chessman[] chessmen = new Chessman[] { new Bishop(2, 3), new Rook(1, 2), new Pawn(2, 2), new Knight(4, 1) };
+
+		engine.initiate(4, chessmen);
+		List<State> states = engine.solve(0);
+		assertNull(states);
+
+		engine.initiate(4, chessmen);
+		states = engine.solve(1);
+		assertNull(states);
+
+		engine.initiate(4, chessmen);
+		states = engine.solve(2);
+		assertNull(states);
+
+		engine.initiate(4, chessmen);
+		states = engine.solve(3);
+		System.out.println("Problem 1 using [" + BFSFrontier.class.getSimpleName() + "] with limitation: " + states.size());
+		assertTrue(states.contains(new State(4, new Chessman[] { new Bishop(2, 3), new Rook(1, 2), new Pawn(2, 2), new Knight(4, 1) })));
+		assertTrue(states.contains(new State(4, new Chessman[] { new Bishop(2, 3), new Rook(1, 2), new Knight(2, 2) })));
+		assertTrue(states.contains(new State(4, new Chessman[] { new Bishop(2, 3), new Rook(2, 2) })));
+		assertTrue(states.contains(new State(4, new Chessman[] { new Rook(2, 3) })));
+	}
+
+	@Test
+	public void test_LimitedDFSFrontier_solve_problem2() throws InstantiationException, IllegalAccessException {
+		Engine engine = new Engine(DFSFrontier.class);
+		Chessman[] chessmen = new Chessman[] { new Bishop(1, 1), new Bishop(2, 3), new Queen(3, 4), new Knight(4, 4) };
+
+		engine.initiate(4, chessmen);
+		List<State> states = engine.solve(0);
+		assertNull(states);
+
+		engine.initiate(4, chessmen);
+		states = engine.solve(1);
+		assertNull(states);
+
+		engine.initiate(4, chessmen);
+		states = engine.solve(2);
+		assertNull(states);
+
+		engine.initiate(4, chessmen);
+		states = engine.solve(3);
+
+		System.out.println("Problem 2 using [" + BFSFrontier.class.getSimpleName() + "] with limitation: " + states.size());
+		assertTrue(states.contains(new State(4, new Chessman[] { new Bishop(1, 1), new Bishop(2, 3), new Queen(3, 4), new Knight(4, 4) })));
+		assertTrue(states.contains(new State(4, new Chessman[] { new Bishop(1, 1), new Queen(2, 3), new Knight(4, 4) })));
+		assertTrue(states.contains(new State(4, new Chessman[] { new Bishop(1, 1), new Knight(2, 3) })));
+		assertTrue(states.contains(new State(4, new Chessman[] { new Knight(1, 1) })));
+
+	}
+
+	@Test
+	public void test_LimitedDFSFrontier_solve_problem3() throws InstantiationException, IllegalAccessException {
+		Engine engine = new Engine(DFSFrontier.class);
+		Chessman[] chessmen = new Chessman[] { new Bishop(1, 4), new Knight(3, 4), new Knight(1, 3), new Queen(2, 3), new Pawn(2, 1) };
+
+		engine.initiate(4, chessmen);
+		List<State> states = engine.solve(0);
+		assertNull(states);
+
+		engine.initiate(4, chessmen);
+		states = engine.solve(1);
+		assertNull(states);
+
+		engine.initiate(4, chessmen);
+		states = engine.solve(2);
+		assertNull(states);
+
+		engine.initiate(4, chessmen);
+		states = engine.solve(3);
+		assertNull(states);
+
+		engine.initiate(4, chessmen);
+		states = engine.solve(4);
+
+		System.out.println("Problem 3 using [" + BFSFrontier.class.getSimpleName() + "] with limitation: " + states.size());
+		assertTrue(states
+				.contains(new State(4, new Chessman[] { new Bishop(1, 4), new Knight(3, 4), new Knight(1, 3), new Queen(2, 3), new Pawn(2, 1) })));
+		assertTrue(states.contains(new State(4, new Chessman[] { new Queen(1, 4), new Knight(3, 4), new Knight(1, 3), new Pawn(2, 1) })));
+		assertTrue(states.contains(new State(4, new Chessman[] { new Knight(3, 4), new Queen(1, 3), new Pawn(2, 1) })));
+		assertTrue(states.contains(new State(4, new Chessman[] { new Knight(1, 3), new Pawn(2, 1) })));
+		assertTrue(states.contains(new State(4, new Chessman[] { new Knight(2, 1) })));
+
+	}
+
+	@Test
+	public void test_DFSFrontier_NoSolution() throws InstantiationException, IllegalAccessException {
+		Engine engine = new Engine(DFSFrontier.class);
+		Chessman[] chessmen = new Chessman[] { new Bishop(2, 3), new Bishop(3, 3) };
+		engine.initiate(4, chessmen);
+		List<State> states = engine.solve();
+		assertNull(states);
+	}
+
+	@Test
 	public void test_DFSFrontier_solve_problem1() throws InstantiationException, IllegalAccessException {
 		Engine engine = new Engine(DFSFrontier.class);
 		Chessman[] chessmen = new Chessman[] { new Bishop(2, 3), new Rook(1, 2), new Pawn(2, 2), new Knight(4, 1) };
@@ -604,7 +701,7 @@ public class TestEngine {
 	@Test
 	public void test_stateToString() {
 		Chessman[] chessmen = new Chessman[] { new Pawn(2, 3), new Bishop(1, 4) };
-		assertEquals("Pawn: [2,3] Bishop: [1,4] ", new State(4, chessmen).toString());
+		assertEquals("Level[2]: Pawn: [2,3] Bishop: [1,4] ", new State(4, 2, chessmen).toString());
 	}
 
 	@Test
