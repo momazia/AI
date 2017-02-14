@@ -2,7 +2,7 @@ package com.sc.main.chessman;
 
 import java.util.List;
 
-import com.sc.main.CustomArrayList;
+import com.sc.engine.CustomArrayList;
 
 /**
  * Represents a chessman in the puzzle. This class is to be extended by the actual pieces.
