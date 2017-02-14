@@ -4,13 +4,17 @@ import java.util.List;
 
 public class Rook extends Chessman {
 
+	public Rook() {
+		super();
+	}
+
 	public Rook(int x, int y) {
 		super(x, y);
 	}
 
 	@Override
-	public List<Chessman> getPossibleVictims(Chessman[] chessmans, int boardSize) {
-		return plusMovement(chessmans, boardSize);
+	public List<Chessman> getPossibleVictims(List<Chessman> chessmen, int boardSize) {
+		return plusMovement(chessmen, boardSize);
 	}
 
 }

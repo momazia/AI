@@ -8,12 +8,19 @@ public abstract class Chessman {
 
 	private Location location;
 
+	public Chessman() {
+	}
+
+	public Chessman(int x, int y) {
+		this.setLocation(new Location(x, y));
+	}
+
 	public Location getLocation() {
 		return location;
 	}
 
-	public Chessman(int x, int y) {
-		this.location = new Location(x, y);
+	public void setLocation(Location location) {
+		this.location = location;
 	}
 
 	@Override
@@ -30,22 +37,22 @@ public abstract class Chessman {
 		return chessman.getLocation().equals(this.getLocation());
 	}
 
-	public abstract List<Chessman> getPossibleVictims(Chessman[] chessmans, int boardSize);
+	public abstract List<Chessman> getPossibleVictims(List<Chessman> chessmen, int boardSize);
 
-	public List<Chessman> crossMovement(Chessman[] chessmans, int boardSize) {
+	public List<Chessman> crossMovement(List<Chessman> chessmen, int boardSize) {
 		List<Chessman> result = new CustomArrayList<>();
-		result.add(upRight(chessmans, boardSize));
-		result.add(upLeft(chessmans, boardSize));
-		result.add(downRight(chessmans, boardSize));
-		result.add(downLeft(chessmans, boardSize));
+		result.add(upRight(chessmen, boardSize));
+		result.add(upLeft(chessmen, boardSize));
+		result.add(downRight(chessmen, boardSize));
+		result.add(downLeft(chessmen, boardSize));
 		return result;
 	}
 
-	private Chessman downLeft(Chessman[] chessmans, int boardSize) {
-		for (int counter = 1; counter <= boardSize - Math.min(location.getX(), location.getY()); counter++) {
-			for (Chessman boardChessman : chessmans) {
-				if (boardChessman.getLocation().getX() == location.getX() - counter
-						&& boardChessman.getLocation().getY() == location.getY() - counter) {
+	private Chessman downLeft(List<Chessman> chessmen, int boardSize) {
+		for (int counter = 1; counter <= boardSize - Math.min(getLocation().getX(), getLocation().getY()); counter++) {
+			for (Chessman boardChessman : chessmen) {
+				if (boardChessman.getLocation().getX() == getLocation().getX() - counter
+						&& boardChessman.getLocation().getY() == getLocation().getY() - counter) {
 					return boardChessman;
 				}
 			}
@@ -53,11 +60,11 @@ public abstract class Chessman {
 		return null;
 	}
 
-	public Chessman downRight(Chessman[] chessmans, int boardSize) {
-		for (int counter = 1; counter <= boardSize - Math.min(location.getX(), location.getY()); counter++) {
-			for (Chessman boardChessman : chessmans) {
-				if (boardChessman.getLocation().getX() == location.getX() + counter
-						&& boardChessman.getLocation().getY() == location.getY() - counter) {
+	public Chessman downRight(List<Chessman> chessmen, int boardSize) {
+		for (int counter = 1; counter <= boardSize - Math.min(getLocation().getX(), getLocation().getY()); counter++) {
+			for (Chessman boardChessman : chessmen) {
+				if (boardChessman.getLocation().getX() == getLocation().getX() + counter
+						&& boardChessman.getLocation().getY() == getLocation().getY() - counter) {
 					return boardChessman;
 				}
 			}
@@ -65,11 +72,11 @@ public abstract class Chessman {
 		return null;
 	}
 
-	public Chessman upLeft(Chessman[] chessmans, int boardSize) {
-		for (int counter = 1; counter <= boardSize - Math.min(location.getX(), location.getY()); counter++) {
-			for (Chessman boardChessman : chessmans) {
-				if (boardChessman.getLocation().getX() == location.getX() - counter
-						&& boardChessman.getLocation().getY() == location.getY() + counter) {
+	public Chessman upLeft(List<Chessman> chessmen, int boardSize) {
+		for (int counter = 1; counter <= boardSize - Math.min(getLocation().getX(), getLocation().getY()); counter++) {
+			for (Chessman boardChessman : chessmen) {
+				if (boardChessman.getLocation().getX() == getLocation().getX() - counter
+						&& boardChessman.getLocation().getY() == getLocation().getY() + counter) {
 					return boardChessman;
 				}
 			}
@@ -77,11 +84,11 @@ public abstract class Chessman {
 		return null;
 	}
 
-	public Chessman upRight(Chessman[] chessmans, int boardSize) {
-		for (int counter = 1; counter <= boardSize - Math.max(location.getX(), location.getY()); counter++) {
-			for (Chessman boardChessman : chessmans) {
-				if (boardChessman.getLocation().getX() == location.getX() + counter
-						&& boardChessman.getLocation().getY() == location.getY() + counter) {
+	public Chessman upRight(List<Chessman> chessmen, int boardSize) {
+		for (int counter = 1; counter <= boardSize - Math.max(getLocation().getX(), getLocation().getY()); counter++) {
+			for (Chessman boardChessman : chessmen) {
+				if (boardChessman.getLocation().getX() == getLocation().getX() + counter
+						&& boardChessman.getLocation().getY() == getLocation().getY() + counter) {
 					return boardChessman;
 				}
 			}
@@ -89,19 +96,19 @@ public abstract class Chessman {
 		return null;
 	}
 
-	public List<Chessman> plusMovement(Chessman[] chessmans, int boardSize) {
+	public List<Chessman> plusMovement(List<Chessman> chessmen, int boardSize) {
 		List<Chessman> result = new CustomArrayList<>();
-		result.add(up(chessmans, boardSize));
-		result.add(down(chessmans, boardSize));
-		result.add(left(chessmans, boardSize));
-		result.add(right(chessmans, boardSize));
+		result.add(up(chessmen, boardSize));
+		result.add(down(chessmen, boardSize));
+		result.add(left(chessmen, boardSize));
+		result.add(right(chessmen, boardSize));
 		return result;
 	}
 
-	public Chessman left(Chessman[] chessmans, int boardSize) {
-		for (int x = location.getX() - 1; x > 0; x--) {
-			for (Chessman boardChessman : chessmans) {
-				if (boardChessman.getLocation().getY() == location.getY() && boardChessman.getLocation().getX() == x) {
+	public Chessman left(List<Chessman> chessmen, int boardSize) {
+		for (int x = getLocation().getX() - 1; x > 0; x--) {
+			for (Chessman boardChessman : chessmen) {
+				if (boardChessman.getLocation().getY() == getLocation().getY() && boardChessman.getLocation().getX() == x) {
 					return boardChessman;
 				}
 			}
@@ -109,10 +116,10 @@ public abstract class Chessman {
 		return null;
 	}
 
-	public Chessman right(Chessman[] chessmans, int boardSize) {
-		for (int x = location.getX() + 1; x <= boardSize; x++) {
-			for (Chessman boardChessman : chessmans) {
-				if (boardChessman.getLocation().getY() == location.getY() && boardChessman.getLocation().getX() == x) {
+	public Chessman right(List<Chessman> chessmen, int boardSize) {
+		for (int x = getLocation().getX() + 1; x <= boardSize; x++) {
+			for (Chessman boardChessman : chessmen) {
+				if (boardChessman.getLocation().getY() == getLocation().getY() && boardChessman.getLocation().getX() == x) {
 					return boardChessman;
 				}
 			}
@@ -120,10 +127,10 @@ public abstract class Chessman {
 		return null;
 	}
 
-	public Chessman up(Chessman[] chessmans, int boardSize) {
-		for (int y = location.getY() + 1; y <= boardSize; y++) {
-			for (Chessman boardChessman : chessmans) {
-				if (boardChessman.getLocation().getY() == y && boardChessman.getLocation().getX() == location.getX()) {
+	public Chessman up(List<Chessman> chessmen, int boardSize) {
+		for (int y = getLocation().getY() + 1; y <= boardSize; y++) {
+			for (Chessman boardChessman : chessmen) {
+				if (boardChessman.getLocation().getY() == y && boardChessman.getLocation().getX() == getLocation().getX()) {
 					return boardChessman;
 				}
 			}
@@ -131,10 +138,10 @@ public abstract class Chessman {
 		return null;
 	}
 
-	public Chessman down(Chessman[] chessmans, int boardSize) {
-		for (int y = location.getY() - 1; y > 0; y--) {
-			for (Chessman boardChessman : chessmans) {
-				if (boardChessman.getLocation().getY() == y && boardChessman.getLocation().getX() == location.getX()) {
+	public Chessman down(List<Chessman> chessmen, int boardSize) {
+		for (int y = getLocation().getY() - 1; y > 0; y--) {
+			for (Chessman boardChessman : chessmen) {
+				if (boardChessman.getLocation().getY() == y && boardChessman.getLocation().getX() == getLocation().getX()) {
 					return boardChessman;
 				}
 			}
@@ -144,7 +151,7 @@ public abstract class Chessman {
 
 	@Override
 	public String toString() {
-		return getClass().getSimpleName() + ": " + location.toString();
+		return getClass().getSimpleName() + ": " + getLocation().toString();
 	}
 
 }

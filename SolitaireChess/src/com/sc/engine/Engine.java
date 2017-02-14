@@ -1,26 +1,36 @@
 package com.sc.engine;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import com.sc.main.chessman.Chessman;
 
 public class Engine {
 
 	private Frontier frontier;
 
-	public Engine() {
-		frontier = new DFSFrontier();
+	public Engine(Class<? extends Frontier> frontierClass) throws InstantiationException, IllegalAccessException {
+		frontier = frontierClass.newInstance();
 	}
 
-	public void initiate(int boardSize, Chessman... chessmans) {
-		frontier.addState(new State(boardSize, chessmans));
+	public void initiate(int boardSize, Chessman... chessmen) {
+		State initialState = new State(boardSize, chessmen);
+		frontier.addState(initialState);
 	}
 
-	public int solve() {
-		int counter = 0;
-		State initialState = frontier.pop();
-		for (State state : initialState.getPossibleStates()) {
-
+	public List<State> solve() throws InstantiationException, IllegalAccessException {
+		List<State> result = new ArrayList<>();
+		while (!frontier.isEmpty()) {
+			State currentState = frontier.pop();
+			result.add(currentState);
+			if (currentState.isGoal()) {
+				return result;
+			}
+			for (State state : currentState.getPossibleStates()) {
+				frontier.addState(state);
+			}
 		}
-		return counter;
+		return null;
 	}
 
 }
