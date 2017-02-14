@@ -2,6 +2,12 @@ package com.sc.engine;
 
 import java.util.Stack;
 
+/**
+ * Depth first search (DFS) uses a stack as a frontier.
+ * 
+ * @author Mahdi Ziaee
+ *
+ */
 public class DFSFrontier implements Frontier {
 
 	private Stack<State> states;

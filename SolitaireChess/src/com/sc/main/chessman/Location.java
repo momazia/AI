@@ -1,5 +1,11 @@
 package com.sc.main.chessman;
 
+/**
+ * Location class represents a location on the board. It contains x and y coordinate of a chessman.
+ * 
+ * @author Mahdi Ziaee
+ *
+ */
 public class Location {
 
 	private int x;
@@ -27,6 +33,11 @@ public class Location {
 		this.y = y;
 	}
 
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see java.lang.Object#equals(java.lang.Object)
+	 */
 	@Override
 	public boolean equals(Object o) {
 
@@ -38,9 +49,15 @@ public class Location {
 		}
 
 		Location location = (Location) o;
+		// Two locations are the same if they have the same x and y.
 		return location.getX() == getX() && location.getY() == getY();
 	}
 
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see java.lang.Object#toString()
+	 */
 	@Override
 	public String toString() {
 		return "[" + x + "," + y + "]";

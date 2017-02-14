@@ -3,6 +3,13 @@ package com.sc.main.chessman;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * 
+ * This class represents a Pawn chessman. It can only go top left or top right.
+ * 
+ * @author Mahdi Ziaee
+ *
+ */
 public class Pawn extends Chessman {
 
 	public Pawn() {

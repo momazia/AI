@@ -2,6 +2,12 @@ package com.sc.main.chessman;
 
 import java.util.List;
 
+/**
+ * This class represents a Rook chessman. It can move in plus shape.
+ * 
+ * @author Mahdi Ziaee
+ *
+ */
 public class Rook extends Chessman {
 
 	public Rook() {

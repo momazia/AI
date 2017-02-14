@@ -2,6 +2,12 @@ package com.sc.main.chessman;
 
 import java.util.List;
 
+/**
+ * This class represents a bishop chessman. It moves diagonally.
+ * 
+ * @author Mahdi Ziaee
+ *
+ */
 public class Bishop extends Chessman {
 
 	public Bishop() {
@@ -14,7 +20,7 @@ public class Bishop extends Chessman {
 
 	@Override
 	public List<Chessman> getPossibleVictims(List<Chessman> chessmen, int boardSize) {
-		return crossMovement(chessmen, boardSize);
+		return diagonalMovement(chessmen, boardSize);
 	}
 
 }

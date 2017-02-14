@@ -14,6 +14,12 @@ import com.sc.main.chessman.Pawn;
 import com.sc.main.chessman.Queen;
 import com.sc.main.chessman.Rook;
 
+/**
+ * A* Frontier uses a heuristic to identify which state (node) to expand first.
+ * 
+ * @author Mahdi Ziaee
+ *
+ */
 public class AStarFrontier implements Frontier {
 
 	private PriorityQueue<State> states;
@@ -21,6 +27,7 @@ public class AStarFrontier implements Frontier {
 	private static Map<Class<? extends Chessman>, Integer> heuristicMap = null;
 
 	static {
+		// List of chessmen based on their possible movements in a 4x4 board.
 		heuristicMap = new HashMap<>();
 		heuristicMap.put(Queen.class, 11);
 		heuristicMap.put(King.class, 8);
@@ -31,6 +38,7 @@ public class AStarFrontier implements Frontier {
 	}
 
 	public AStarFrontier() {
+		// Using a priority queue which sorts the elements based on sum of all chessmen scores.
 		states = new PriorityQueue<>(new Comparator<State>() {
 
 			@Override

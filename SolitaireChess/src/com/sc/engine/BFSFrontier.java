@@ -3,6 +3,12 @@ package com.sc.engine;
 import java.util.LinkedList;
 import java.util.Queue;
 
+/**
+ * Breadth first search (BFS) uses a linked list queue as frontier.
+ * 
+ * @author Mahdi Ziaee
+ *
+ */
 public class BFSFrontier implements Frontier {
 
 	private Queue<State> states;

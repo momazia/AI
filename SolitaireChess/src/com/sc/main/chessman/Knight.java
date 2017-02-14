@@ -3,6 +3,12 @@ package com.sc.main.chessman;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * This class represents a knight chessman. It just like an L shape.
+ * 
+ * @author Mahdi Ziaee
+ *
+ */
 public class Knight extends Chessman {
 
 	public Knight() {

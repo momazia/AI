@@ -3,6 +3,12 @@ package com.sc.main.chessman;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * This class represents a king chessman. It moves one square in any direction.
+ * 
+ * @author Mahdi Ziaee
+ *
+ */
 public class King extends Chessman {
 
 	public King() {
