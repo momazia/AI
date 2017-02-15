@@ -1,9 +1,14 @@
 package com.sc.test;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNull;
+import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.fail;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.Stack;
 
 import org.junit.Test;
 
@@ -11,8 +16,11 @@ import com.sc.engine.AStarFrontier;
 import com.sc.engine.BFSFrontier;
 import com.sc.engine.DFSFrontier;
 import com.sc.engine.Engine;
+import com.sc.engine.Movement;
 import com.sc.engine.NoSolutionFoundException;
 import com.sc.engine.State;
+import com.sc.main.MainApplication;
+import com.sc.main.Result;
 import com.sc.main.chessman.Bishop;
 import com.sc.main.chessman.Chessman;
 import com.sc.main.chessman.King;
@@ -505,7 +513,7 @@ public class TestEngine {
 		Engine engine = new Engine(BFSFrontier.class);
 		Chessman[] chessmen = new Chessman[] { new Pawn(2, 3), new Bishop(4, 1) };
 		engine.initiate(4, chessmen);
-		List<State> states = engine.solve();
+		List<State> states = engine.solve().getExploredStates();
 		assertEquals(2, states.size());
 		assertEquals(new State(4, new Chessman[] { new Pawn(2, 3), new Bishop(4, 1) }), states.get(0));
 		assertEquals(new State(4, new Chessman[] { new Bishop(2, 3) }), states.get(1));
@@ -516,7 +524,7 @@ public class TestEngine {
 		Engine engine = new Engine(BFSFrontier.class);
 		Chessman[] chessmen = new Chessman[] { new Bishop(2, 3), new Rook(1, 2), new Pawn(2, 2), new Knight(4, 1) };
 		engine.initiate(4, chessmen);
-		List<State> states = engine.solve();
+		List<State> states = engine.solve().getExploredStates();
 		System.out.println("Problem 1 using [" + BFSFrontier.class.getSimpleName() + "]: " + states.size());
 		assertTrue(states.contains(new State(4, new Chessman[] { new Bishop(2, 3), new Rook(1, 2), new Pawn(2, 2), new Knight(4, 1) })));
 		assertTrue(states.contains(new State(4, new Chessman[] { new Bishop(2, 3), new Rook(1, 2), new Knight(2, 2) })));
@@ -529,7 +537,7 @@ public class TestEngine {
 		Engine engine = new Engine(BFSFrontier.class);
 		Chessman[] chessmen = new Chessman[] { new Bishop(1, 1), new Bishop(2, 3), new Queen(3, 4), new Knight(4, 4) };
 		engine.initiate(4, chessmen);
-		List<State> states = engine.solve();
+		List<State> states = engine.solve().getExploredStates();
 		System.out.println("Problem 2 using [" + BFSFrontier.class.getSimpleName() + "]: " + states.size());
 		assertTrue(states.contains(new State(4, new Chessman[] { new Bishop(1, 1), new Bishop(2, 3), new Queen(3, 4), new Knight(4, 4) })));
 		assertTrue(states.contains(new State(4, new Chessman[] { new Bishop(1, 1), new Queen(2, 3), new Knight(4, 4) })));
@@ -542,7 +550,7 @@ public class TestEngine {
 		Engine engine = new Engine(BFSFrontier.class);
 		Chessman[] chessmen = new Chessman[] { new Bishop(1, 4), new Knight(3, 4), new Knight(1, 3), new Queen(2, 3), new Pawn(2, 1) };
 		engine.initiate(4, chessmen);
-		List<State> states = engine.solve();
+		List<State> states = engine.solve().getExploredStates();
 		System.out.println("Problem 3 using [" + BFSFrontier.class.getSimpleName() + "]: " + states.size());
 		assertTrue(states
 				.contains(new State(4, new Chessman[] { new Bishop(1, 4), new Knight(3, 4), new Knight(1, 3), new Queen(2, 3), new Pawn(2, 1) })));
@@ -560,7 +568,7 @@ public class TestEngine {
 		engine.initiate(4, chessmen);
 		List<State> states;
 		try {
-			states = engine.solve(0);
+			states = engine.solve(0).getExploredStates();
 			fail("States must be null");
 		} catch (NoSolutionFoundException e) {
 			// OK
@@ -568,21 +576,21 @@ public class TestEngine {
 
 		engine.initiate(4, chessmen);
 		try {
-			states = engine.solve(1);
+			states = engine.solve(1).getExploredStates();
 			fail("States must be null");
 		} catch (NoSolutionFoundException e) {
 			// OK
 		}
 
 		try {
-			states = engine.solve(2);
+			states = engine.solve(2).getExploredStates();
 			fail("States must be null");
 		} catch (NoSolutionFoundException e) {
 			// OK
 		}
 
 		engine.initiate(4, chessmen);
-		states = engine.solve(3);
+		states = engine.solve(3).getExploredStates();
 		System.out.println("Problem 1 using [" + BFSFrontier.class.getSimpleName() + "] with limitation: " + states.size());
 		assertTrue(states.contains(new State(4, new Chessman[] { new Bishop(2, 3), new Rook(1, 2), new Pawn(2, 2), new Knight(4, 1) })));
 		assertTrue(states.contains(new State(4, new Chessman[] { new Bishop(2, 3), new Rook(1, 2), new Knight(2, 2) })));
@@ -598,7 +606,7 @@ public class TestEngine {
 		engine.initiate(4, chessmen);
 		List<State> states;
 		try {
-			states = engine.solve(0);
+			states = engine.solve(0).getExploredStates();
 			fail("States must be null");
 		} catch (NoSolutionFoundException e) {
 			// OK
@@ -606,7 +614,7 @@ public class TestEngine {
 
 		engine.initiate(4, chessmen);
 		try {
-			states = engine.solve(1);
+			states = engine.solve(1).getExploredStates();
 			fail("States must be null");
 		} catch (NoSolutionFoundException e) {
 			// OK
@@ -614,14 +622,14 @@ public class TestEngine {
 
 		engine.initiate(4, chessmen);
 		try {
-			states = engine.solve(2);
+			states = engine.solve(2).getExploredStates();
 			fail("States must be null");
 		} catch (NoSolutionFoundException e) {
 			// OK
 		}
 
 		engine.initiate(4, chessmen);
-		states = engine.solve(3);
+		states = engine.solve(3).getExploredStates();
 
 		System.out.println("Problem 2 using [" + BFSFrontier.class.getSimpleName() + "] with limitation: " + states.size());
 		assertTrue(states.contains(new State(4, new Chessman[] { new Bishop(1, 1), new Bishop(2, 3), new Queen(3, 4), new Knight(4, 4) })));
@@ -639,7 +647,7 @@ public class TestEngine {
 		engine.initiate(4, chessmen);
 		List<State> states;
 		try {
-			states = engine.solve(0);
+			states = engine.solve(0).getExploredStates();
 			fail("States must be null");
 		} catch (NoSolutionFoundException e) {
 			// OK
@@ -647,7 +655,7 @@ public class TestEngine {
 
 		engine.initiate(4, chessmen);
 		try {
-			states = engine.solve(1);
+			states = engine.solve(1).getExploredStates();
 			fail("States must be null");
 		} catch (NoSolutionFoundException e) {
 			// OK
@@ -655,7 +663,7 @@ public class TestEngine {
 
 		engine.initiate(4, chessmen);
 		try {
-			states = engine.solve(2);
+			states = engine.solve(2).getExploredStates();
 			fail("States must be null");
 		} catch (NoSolutionFoundException e) {
 			// OK
@@ -663,14 +671,14 @@ public class TestEngine {
 
 		engine.initiate(4, chessmen);
 		try {
-			states = engine.solve(3);
+			states = engine.solve(3).getExploredStates();
 			fail("States must be null");
 		} catch (NoSolutionFoundException e) {
 			// OK
 		}
 
 		engine.initiate(4, chessmen);
-		states = engine.solve(4);
+		states = engine.solve(4).getExploredStates();
 
 		System.out.println("Problem 3 using [" + BFSFrontier.class.getSimpleName() + "] with limitation: " + states.size());
 		assertTrue(states
@@ -687,7 +695,7 @@ public class TestEngine {
 		Engine engine = new Engine(DFSFrontier.class);
 		Chessman[] chessmen = new Chessman[] { new Bishop(2, 3), new Rook(1, 2), new Pawn(2, 2), new Knight(4, 1) };
 
-		List<State> states = engine.solveIteratively(4, chessmen);
+		List<State> states = engine.solveIteratively(4, chessmen).getExploredStates();
 
 		System.out.println("Problem 1 using [" + BFSFrontier.class.getSimpleName() + "] with iterative limitation: " + states.size());
 		assertTrue(states.contains(new State(4, new Chessman[] { new Bishop(2, 3), new Rook(1, 2), new Pawn(2, 2), new Knight(4, 1) })));
@@ -701,7 +709,7 @@ public class TestEngine {
 		Engine engine = new Engine(DFSFrontier.class);
 		Chessman[] chessmen = new Chessman[] { new Bishop(1, 1), new Bishop(2, 3), new Queen(3, 4), new Knight(4, 4) };
 
-		List<State> states = engine.solveIteratively(4, chessmen);
+		List<State> states = engine.solveIteratively(4, chessmen).getExploredStates();
 
 		System.out.println("Problem 2 using [" + BFSFrontier.class.getSimpleName() + "] with iterative limitation: " + states.size());
 		assertTrue(states.contains(new State(4, new Chessman[] { new Bishop(1, 1), new Bishop(2, 3), new Queen(3, 4), new Knight(4, 4) })));
@@ -715,7 +723,7 @@ public class TestEngine {
 		Engine engine = new Engine(DFSFrontier.class);
 		Chessman[] chessmen = new Chessman[] { new Bishop(1, 4), new Knight(3, 4), new Knight(1, 3), new Queen(2, 3), new Pawn(2, 1) };
 
-		List<State> states = engine.solveIteratively(4, chessmen);
+		List<State> states = engine.solveIteratively(4, chessmen).getExploredStates();
 
 		System.out.println("Problem 3 using [" + BFSFrontier.class.getSimpleName() + "] with iterative limitation: " + states.size());
 		assertTrue(states
@@ -745,12 +753,23 @@ public class TestEngine {
 		Engine engine = new Engine(DFSFrontier.class);
 		Chessman[] chessmen = new Chessman[] { new Bishop(2, 3), new Rook(1, 2), new Pawn(2, 2), new Knight(4, 1) };
 		engine.initiate(4, chessmen);
-		List<State> states = engine.solve();
+		Result result = engine.solve();
+		List<State> states = result.getExploredStates();
 		System.out.println("Problem 1 using [" + DFSFrontier.class.getSimpleName() + "]: " + states.size());
-		assertTrue(states.contains(new State(4, new Chessman[] { new Bishop(2, 3), new Rook(1, 2), new Pawn(2, 2), new Knight(4, 1) })));
-		assertTrue(states.contains(new State(4, new Chessman[] { new Bishop(2, 3), new Rook(1, 2), new Knight(2, 2) })));
-		assertTrue(states.contains(new State(4, new Chessman[] { new Bishop(2, 3), new Rook(2, 2) })));
-		assertTrue(states.contains(new State(4, new Chessman[] { new Rook(2, 3) })));
+		State state1 = new State(4, new Chessman[] { new Bishop(2, 3), new Rook(1, 2), new Pawn(2, 2), new Knight(4, 1) });
+		State state2 = new State(4, new Chessman[] { new Bishop(2, 3), new Rook(1, 2), new Knight(2, 2) });
+		State state3 = new State(4, new Chessman[] { new Bishop(2, 3), new Rook(2, 2) });
+		State state4 = new State(4, new Chessman[] { new Rook(2, 3) });
+		assertTrue(states.contains(state1));
+		assertTrue(states.contains(state2));
+		assertTrue(states.contains(state3));
+		assertTrue(states.contains(state4));
+		// final solution
+		assertEquals(4, result.getFinalPath().size());
+		assertEquals(state1, result.getFinalPath().get(0));
+		assertEquals(state2, result.getFinalPath().get(1));
+		assertEquals(state3, result.getFinalPath().get(2));
+		assertEquals(state4, result.getFinalPath().get(3));
 	}
 
 	@Test
@@ -758,7 +777,7 @@ public class TestEngine {
 		Engine engine = new Engine(DFSFrontier.class);
 		Chessman[] chessmen = new Chessman[] { new Bishop(1, 1), new Bishop(2, 3), new Queen(3, 4), new Knight(4, 4) };
 		engine.initiate(4, chessmen);
-		List<State> states = engine.solve();
+		List<State> states = engine.solve().getExploredStates();
 		System.out.println("Problem 2 using [" + DFSFrontier.class.getSimpleName() + "]: " + states.size());
 		assertTrue(states.contains(new State(4, new Chessman[] { new Bishop(1, 1), new Bishop(2, 3), new Queen(3, 4), new Knight(4, 4) })));
 		assertTrue(states.contains(new State(4, new Chessman[] { new Bishop(1, 1), new Queen(2, 3), new Knight(4, 4) })));
@@ -771,7 +790,7 @@ public class TestEngine {
 		Engine engine = new Engine(DFSFrontier.class);
 		Chessman[] chessmen = new Chessman[] { new Bishop(1, 4), new Knight(3, 4), new Knight(1, 3), new Queen(2, 3), new Pawn(2, 1) };
 		engine.initiate(4, chessmen);
-		List<State> states = engine.solve();
+		List<State> states = engine.solve().getExploredStates();
 		System.out.println("Problem 3 using [" + DFSFrontier.class.getSimpleName() + "]: " + states.size());
 		assertTrue(states
 				.contains(new State(4, new Chessman[] { new Bishop(1, 4), new Knight(3, 4), new Knight(1, 3), new Queen(2, 3), new Pawn(2, 1) })));
@@ -786,12 +805,26 @@ public class TestEngine {
 		Engine engine = new Engine(AStarFrontier.class);
 		Chessman[] chessmen = new Chessman[] { new Bishop(2, 3), new Rook(1, 2), new Pawn(2, 2), new Knight(4, 1) };
 		engine.initiate(4, chessmen);
-		List<State> states = engine.solve();
+		Result result = engine.solve();
+		List<State> states = result.getExploredStates();
 		System.out.println("Problem 1 using [" + AStarFrontier.class.getSimpleName() + "]: " + states.size());
-		assertTrue(states.contains(new State(4, new Chessman[] { new Bishop(2, 3), new Rook(1, 2), new Pawn(2, 2), new Knight(4, 1) })));
-		assertTrue(states.contains(new State(4, new Chessman[] { new Bishop(2, 3), new Rook(1, 2), new Knight(2, 2) })));
-		assertTrue(states.contains(new State(4, new Chessman[] { new Bishop(2, 3), new Rook(2, 2) })));
-		assertTrue(states.contains(new State(4, new Chessman[] { new Rook(2, 3) })));
+		State state1 = new State(4, new Chessman[] { new Bishop(2, 3), new Rook(1, 2), new Pawn(2, 2), new Knight(4, 1) });
+		State state2 = new State(4, new Chessman[] { new Bishop(2, 3), new Rook(1, 2), new Knight(2, 2) });
+		State state3 = new State(4, new Chessman[] { new Bishop(2, 3), new Rook(2, 2) });
+		State state4 = new State(4, new Chessman[] { new Rook(2, 3) });
+		assertTrue(states.contains(state1));
+		assertTrue(states.contains(state2));
+		assertTrue(states.contains(state3));
+		assertTrue(states.contains(state4));
+		// final solution
+		for (State state : result.getFinalPath()) {
+			System.out.println(state);
+		}
+		assertEquals(4, result.getFinalPath().size());
+		assertEquals(state1, result.getFinalPath().get(0));
+		assertEquals(state2, result.getFinalPath().get(1));
+		assertEquals(state3, result.getFinalPath().get(2));
+		assertEquals(state4, result.getFinalPath().get(3));
 	}
 
 	@Test
@@ -799,7 +832,7 @@ public class TestEngine {
 		Engine engine = new Engine(AStarFrontier.class);
 		Chessman[] chessmen = new Chessman[] { new Bishop(1, 1), new Bishop(2, 3), new Queen(3, 4), new Knight(4, 4) };
 		engine.initiate(4, chessmen);
-		List<State> states = engine.solve();
+		List<State> states = engine.solve().getExploredStates();
 		System.out.println("Problem 2 using [" + AStarFrontier.class.getSimpleName() + "]: " + states.size());
 		assertTrue(states.contains(new State(4, new Chessman[] { new Bishop(1, 1), new Bishop(2, 3), new Queen(3, 4), new Knight(4, 4) })));
 		assertTrue(states.contains(new State(4, new Chessman[] { new Bishop(1, 1), new Queen(2, 3), new Knight(4, 4) })));
@@ -812,7 +845,7 @@ public class TestEngine {
 		Engine engine = new Engine(AStarFrontier.class);
 		Chessman[] chessmen = new Chessman[] { new Bishop(1, 4), new Knight(3, 4), new Knight(1, 3), new Queen(2, 3), new Pawn(2, 1) };
 		engine.initiate(4, chessmen);
-		List<State> states = engine.solve();
+		List<State> states = engine.solve().getExploredStates();
 		System.out.println("Problem 3 using [" + AStarFrontier.class.getSimpleName() + "]: " + states.size());
 		assertTrue(states
 				.contains(new State(4, new Chessman[] { new Bishop(1, 4), new Knight(3, 4), new Knight(1, 3), new Queen(2, 3), new Pawn(2, 1) })));
@@ -828,7 +861,7 @@ public class TestEngine {
 		Chessman[] chessmen = new Chessman[] { new Rook(2, 2), new Rook(3, 3) };
 
 		try {
-			engine.solveIteratively(4, chessmen);
+			engine.solveIteratively(4, chessmen).getExploredStates();
 			fail("No solution can be found!");
 		} catch (NoSolutionFoundException e) {
 			// Ok
@@ -839,19 +872,31 @@ public class TestEngine {
 	public void test_Iterative_AStarFrontier_solve_problem1() throws InstantiationException, IllegalAccessException, NoSolutionFoundException {
 		Engine engine = new Engine(AStarFrontier.class);
 		Chessman[] chessmen = new Chessman[] { new Bishop(2, 3), new Rook(1, 2), new Pawn(2, 2), new Knight(4, 1) };
-		List<State> states = engine.solveIteratively(4, chessmen);
+		Result result = engine.solveIteratively(4, chessmen);
+		List<State> states = result.getExploredStates();
 		System.out.println("Problem 1 using [" + AStarFrontier.class.getSimpleName() + "] with iterative limitation: " + states.size());
-		assertTrue(states.contains(new State(4, new Chessman[] { new Bishop(2, 3), new Rook(1, 2), new Pawn(2, 2), new Knight(4, 1) })));
-		assertTrue(states.contains(new State(4, new Chessman[] { new Bishop(2, 3), new Rook(1, 2), new Knight(2, 2) })));
-		assertTrue(states.contains(new State(4, new Chessman[] { new Bishop(2, 3), new Rook(2, 2) })));
-		assertTrue(states.contains(new State(4, new Chessman[] { new Rook(2, 3) })));
+		State state1 = new State(4, new Chessman[] { new Bishop(2, 3), new Rook(1, 2), new Pawn(2, 2), new Knight(4, 1) });
+		State state2 = new State(4, new Chessman[] { new Bishop(2, 3), new Rook(1, 2), new Knight(2, 2) });
+		State state3 = new State(4, new Chessman[] { new Bishop(2, 3), new Rook(2, 2) });
+		State state4 = new State(4, new Chessman[] { new Rook(2, 3) });
+		assertTrue(states.contains(state1));
+		assertTrue(states.contains(state2));
+		assertTrue(states.contains(state3));
+		assertTrue(states.contains(state4));
+		// final solution
+		assertEquals(4, result.getFinalPath().size());
+		assertEquals(state1, result.getFinalPath().get(0));
+		assertEquals(state2, result.getFinalPath().get(1));
+		assertEquals(state3, result.getFinalPath().get(2));
+		assertEquals(state4, result.getFinalPath().get(3));
+
 	}
 
 	@Test
 	public void test_Iterative_AStarFrontier_solve_problem2() throws InstantiationException, IllegalAccessException, NoSolutionFoundException {
 		Engine engine = new Engine(AStarFrontier.class);
 		Chessman[] chessmen = new Chessman[] { new Bishop(1, 1), new Bishop(2, 3), new Queen(3, 4), new Knight(4, 4) };
-		List<State> states = engine.solveIteratively(4, chessmen);
+		List<State> states = engine.solveIteratively(4, chessmen).getExploredStates();
 		System.out.println("Problem 2 using [" + AStarFrontier.class.getSimpleName() + "] with iterative limitation: " + states.size());
 		assertTrue(states.contains(new State(4, new Chessman[] { new Bishop(1, 1), new Bishop(2, 3), new Queen(3, 4), new Knight(4, 4) })));
 		assertTrue(states.contains(new State(4, new Chessman[] { new Bishop(1, 1), new Queen(2, 3), new Knight(4, 4) })));
@@ -863,7 +908,7 @@ public class TestEngine {
 	public void test_Iterative_AStarFrontier_solve_problem3() throws InstantiationException, IllegalAccessException, NoSolutionFoundException {
 		Engine engine = new Engine(AStarFrontier.class);
 		Chessman[] chessmen = new Chessman[] { new Bishop(1, 4), new Knight(3, 4), new Knight(1, 3), new Queen(2, 3), new Pawn(2, 1) };
-		List<State> states = engine.solveIteratively(4, chessmen);
+		List<State> states = engine.solveIteratively(4, chessmen).getExploredStates();
 		System.out.println("Problem 3 using [" + AStarFrontier.class.getSimpleName() + "] with iterative limitation: " + states.size());
 		assertTrue(states
 				.contains(new State(4, new Chessman[] { new Bishop(1, 4), new Knight(3, 4), new Knight(1, 3), new Queen(2, 3), new Pawn(2, 1) })));
@@ -895,4 +940,56 @@ public class TestEngine {
 		assertEquals(new Pawn(2, 2), otherChessmen.get(1));
 	}
 
+	@Test
+	public void test_updatePath() throws InstantiationException, IllegalAccessException {
+		Engine engine = new Engine(DFSFrontier.class);
+		Stack<State> finalPath = new Stack<>();
+		// First one
+		State state1 = new State(4, 0, new Pawn(2, 3), new Bishop(1, 4));
+		engine.updatePath(finalPath, state1);
+		assertEquals(state1, finalPath.peek());
+		// Moving down
+		State state2 = new State(4, 1, new Pawn(2, 3), new Bishop(1, 4));
+		engine.updatePath(finalPath, state2);
+		assertEquals(state1, finalPath.get(0));
+		assertEquals(state2, finalPath.get(1));
+		// Horizontal
+		State state3 = new State(4, 1, new Pawn(2, 3), new Bishop(1, 4));
+		engine.updatePath(finalPath, state3);
+		assertEquals(state1, finalPath.get(0));
+		assertEquals(state3, finalPath.get(1));
+		// Moving down twice
+		State state4 = new State(4, 2, new Pawn(2, 3), new Bishop(1, 4));
+		engine.updatePath(finalPath, state4);
+		assertEquals(state1, finalPath.get(0));
+		assertEquals(state3, finalPath.get(1));
+		assertEquals(state4, finalPath.get(2));
+		// Moving down twice
+		State state5 = new State(4, 3, new Pawn(2, 3), new Bishop(1, 4));
+		engine.updatePath(finalPath, state5);
+		assertEquals(state1, finalPath.get(0));
+		assertEquals(state3, finalPath.get(1));
+		assertEquals(state4, finalPath.get(2));
+		assertEquals(state5, finalPath.get(3));
+		// Moving up one level
+		State state6 = new State(4, 1, new Pawn(2, 3), new Bishop(1, 4));
+		engine.updatePath(finalPath, state6);
+		assertEquals(state1, finalPath.get(0));
+		assertEquals(state6, finalPath.get(1));
+	}
+
+	@Test
+	public void test_chessmanEquals() {
+		assertFalse(new Pawn(2, 3).equals(new Bishop(1, 4)));
+		assertFalse(new Pawn(1, 4).equals(new Bishop(1, 4)));
+		assertTrue(new Knight(1, 4).equals(new Knight(1, 4)));
+	}
+
+	@Test
+	public void test_printMove1() {
+		Location oldLocation = new Location(2, 3);
+		Chessman chessman = new Knight(4, 2);
+		State currentState = new State(4, new Movement(oldLocation, chessman), new Chessman[] { new Bishop(2, 3), new Rook(1, 2), new Knight(2, 2) });
+		assertEquals("Knight: [2,3]->[4,2]", MainApplication.printMove(currentState));
+	}
 }

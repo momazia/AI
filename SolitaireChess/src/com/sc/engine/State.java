@@ -17,10 +17,18 @@ public class State {
 	private int boardSize;
 	private List<Chessman> chessmen;
 	private Integer level;
+	private Movement movement;
 
 	public State(int boardSize, Chessman... chessmen) {
 		super();
 		this.boardSize = boardSize;
+		this.chessmen = Arrays.asList(chessmen);
+	}
+
+	public State(int boardSize, Movement movement, Chessman... chessmen) {
+		super();
+		this.boardSize = boardSize;
+		this.movement = movement;
 		this.chessmen = Arrays.asList(chessmen);
 	}
 
@@ -72,7 +80,7 @@ public class State {
 			Chessman newChessman = getNewChessman(currentChessman, victim);
 			// Adding all the chessmen together
 			otherChessmen.add(newChessman);
-			result.add(new State(boardSize, otherChessmen.toArray(new Chessman[0])));
+			result.add(new State(boardSize, new Movement(currentChessman.getLocation(), newChessman), otherChessmen.toArray(new Chessman[0])));
 		}
 		return result;
 	}
@@ -162,5 +170,13 @@ public class State {
 
 	public void setLevel(Integer level) {
 		this.level = level;
+	}
+
+	public Movement getMovement() {
+		return movement;
+	}
+
+	public void setMovement(Movement movement) {
+		this.movement = movement;
 	}
 }

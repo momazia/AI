@@ -46,7 +46,7 @@ public abstract class Chessman {
 
 		Chessman chessman = (Chessman) o;
 		// Two chessmen are the same if they are of the same type AND they are on the same location.
-		return chessman.getLocation().equals(this.getLocation());
+		return chessman.getClass().equals(getClass()) && chessman.getLocation().equals(this.getLocation());
 	}
 
 	/**

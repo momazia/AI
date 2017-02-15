@@ -2,7 +2,9 @@ package com.sc.engine;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Stack;
 
+import com.sc.main.Result;
 import com.sc.main.chessman.Chessman;
 
 /**
@@ -46,7 +48,7 @@ public class Engine {
 	 * @throws NoSolutionFoundException
 	 *             if it cannot find a solution to the problem.
 	 */
-	public List<State> solve() throws InstantiationException, IllegalAccessException, NoSolutionFoundException {
+	public Result solve() throws InstantiationException, IllegalAccessException, NoSolutionFoundException {
 		return solve(null);
 	}
 
@@ -61,12 +63,12 @@ public class Engine {
 	 * @throws IllegalAccessException
 	 * @throws NoSolutionFoundException
 	 */
-	public List<State> solveIteratively(int boardSize, Chessman[] chessmen)
+	public Result solveIteratively(int boardSize, Chessman[] chessmen)
 			throws InstantiationException, IllegalAccessException, NoSolutionFoundException {
 		// Instantiating the initial values
 		int counter = 0;
-		List<State> solution = null;
-		List<State> result = new ArrayList<>();
+		Result solution = new Result();
+		List<State> exploredStates = new ArrayList<>();
 		State initialState = new State(boardSize, 0, chessmen);
 		do {
 			// Creating a new frontier and adding the first state into the frontier.
@@ -76,21 +78,22 @@ public class Engine {
 				// Solving the problem with depth = counter
 				solution = solve(counter);
 				// Adding all the found solutions
-				result.addAll(solution);
+				exploredStates.addAll(solution.getExploredStates());
 			} catch (NoSolutionFoundException e) {
 				// Checking to see if we might have gotten stuck by comparing what we have explored so far compare to
 				// the last run. If they are the same, that means we have reach to the end of the tree and increasing
 				// the counter won't help.
-				if (result.containsAll(e.getExploredStates())) {
+				if (exploredStates.containsAll(e.getExploredStates())) {
 					throw e;
 				}
 				// When no result is found, add all those steps which were explored so far.
-				result.addAll(e.getExploredStates());
+				exploredStates.addAll(e.getExploredStates());
 			}
 			counter++;
 			// If solution is null, it means nothing is found.
-		} while (solution == null);
-		return result;
+		} while (solution.getExploredStates() == null);
+		solution.setExploredStates(exploredStates);
+		return solution;
 	}
 
 	/**
@@ -104,15 +107,20 @@ public class Engine {
 	 * @throws NoSolutionFoundException
 	 *             if it cannot find a solution to the problem.
 	 */
-	public List<State> solve(Integer maxDepthLimit) throws InstantiationException, IllegalAccessException, NoSolutionFoundException {
-		List<State> result = new ArrayList<>();
+	public Result solve(Integer maxDepthLimit) throws InstantiationException, IllegalAccessException, NoSolutionFoundException {
+		List<State> exploredStates = new ArrayList<>();
+		Stack<State> finalPath = new Stack<>();
+		Result result = new Result();
 		while (!frontier.isEmpty()) {
 			State currentState = frontier.pop();
 			if (maxDepthLimit != null && currentState.getLevel() > maxDepthLimit) {
 				continue;
 			}
-			result.add(currentState);
+			exploredStates.add(currentState);
+			updatePath(finalPath, currentState);
 			if (currentState.isGoal()) {
+				result.setExploredStates(exploredStates);
+				result.setFinalPath(finalPath);
 				return result;
 			}
 			for (State state : currentState.getPossibleStates()) {
@@ -120,7 +128,28 @@ public class Engine {
 				frontier.addState(state);
 			}
 		}
-		throw new NoSolutionFoundException(result);
+		throw new NoSolutionFoundException(exploredStates);
+	}
+
+	/**
+	 * Updates the final path based on the level we are at.
+	 * 
+	 * @param finalPath
+	 * @param currentState
+	 */
+	public void updatePath(Stack<State> finalPath, State currentState) {
+		Integer previousLevel = finalPath.isEmpty() ? -1 : finalPath.peek().getLevel();
+		Integer currentLevel = currentState.getLevel();
+		if (currentLevel == previousLevel) {
+			// we are moving horizontally, removing the last added state and adding the current one.
+			finalPath.pop();
+		} else if (currentLevel < previousLevel) {
+			// we are moving up, we need to see how many levels we are moving up so we can remove them
+			for (int i = 0; i <= previousLevel - currentLevel; i++) {
+				finalPath.pop();
+			}
+		}
+		finalPath.push(currentState);
 	}
 
 }
