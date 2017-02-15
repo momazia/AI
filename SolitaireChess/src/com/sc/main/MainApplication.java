@@ -107,9 +107,9 @@ public class MainApplication {
 	 * @return
 	 */
 	public static String printMove(State currentState) {
-		return String.format("%s: [%d,%d]->[%d,%d]", currentState.getMovement().getChessman().getClass().getSimpleName(),
-				currentState.getMovement().getOldLocation().getX(), currentState.getMovement().getOldLocation().getY(),
-				currentState.getMovement().getChessman().getLocation().getX(), currentState.getMovement().getChessman().getLocation().getY());
+		return String.format("%s: [%c%d]->[%c%d]", currentState.getMovement().getChessman().getClass().getSimpleName(),
+				currentState.getMovement().getOldLocation().getX() + 64, currentState.getMovement().getOldLocation().getY(),
+				currentState.getMovement().getChessman().getLocation().getX() + 64, currentState.getMovement().getChessman().getLocation().getY());
 	}
 
 }

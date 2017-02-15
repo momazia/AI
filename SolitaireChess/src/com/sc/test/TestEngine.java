@@ -928,7 +928,7 @@ public class TestEngine {
 	@Test
 	public void test_stateToString() {
 		Chessman[] chessmen = new Chessman[] { new Pawn(2, 3), new Bishop(1, 4) };
-		assertEquals("Level[2]: Pawn: [2,3] Bishop: [1,4] ", new State(4, 2, chessmen).toString());
+		assertEquals("Level[2]: Pawn: [B3] Bishop: [A4] ", new State(4, 2, chessmen).toString());
 	}
 
 	@Test
@@ -990,6 +990,6 @@ public class TestEngine {
 		Location oldLocation = new Location(2, 3);
 		Chessman chessman = new Knight(4, 2);
 		State currentState = new State(4, new Movement(oldLocation, chessman), new Chessman[] { new Bishop(2, 3), new Rook(1, 2), new Knight(2, 2) });
-		assertEquals("Knight: [2,3]->[4,2]", MainApplication.printMove(currentState));
+		assertEquals("Knight: [B3]->[D2]", MainApplication.printMove(currentState));
 	}
 }

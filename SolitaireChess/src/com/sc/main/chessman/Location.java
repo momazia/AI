@@ -60,6 +60,6 @@ public class Location {
 	 */
 	@Override
 	public String toString() {
-		return "[" + x + "," + y + "]";
+		return String.format("[%c%d]", x + 64, y);
 	}
 }
