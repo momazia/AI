@@ -875,10 +875,10 @@ public class TestEngine {
 		Result result = engine.solveIteratively(4, chessmen);
 		List<State> states = result.getExploredStates();
 		System.out.println("Problem 1 using [" + AStarFrontier.class.getSimpleName() + "] with iterative limitation: " + states.size());
-		State state1 = new State(4, new Chessman[] { new Bishop(2, 3), new Rook(1, 2), new Pawn(2, 2), new Knight(4, 1) });
-		State state2 = new State(4, new Chessman[] { new Bishop(2, 3), new Rook(1, 2), new Knight(2, 2) });
-		State state3 = new State(4, new Chessman[] { new Bishop(2, 3), new Rook(2, 2) });
-		State state4 = new State(4, new Chessman[] { new Rook(2, 3) });
+		State state1 = new State(4, 0, new Chessman[] { new Bishop(2, 3), new Rook(1, 2), new Pawn(2, 2), new Knight(4, 1) });
+		State state2 = new State(4, 1, new Chessman[] { new Bishop(2, 3), new Rook(1, 2), new Knight(2, 2) });
+		State state3 = new State(4, 2, new Chessman[] { new Bishop(2, 3), new Rook(2, 2) });
+		State state4 = new State(4, 3, new Chessman[] { new Rook(2, 3) });
 		assertTrue(states.contains(state1));
 		assertTrue(states.contains(state2));
 		assertTrue(states.contains(state3));
