@@ -45,7 +45,7 @@ public class MainApplication {
 			new Puzzle(4, true, AStarFrontier.class, new Bishop(1, 1), new Bishop(2, 3), new Queen(3, 4), new Knight(4, 4)),
 			new Puzzle(4, true, AStarFrontier.class, new Bishop(1, 4), new Knight(3, 4), new Knight(1, 3), new Queen(2, 3), new Pawn(2, 1)),
 			// Hard challenge
-			new Puzzle(4, false, DFSFrontier.class, new Rook(3, 4), new Rook(1, 3), new Knight(2, 3), new Pawn(4, 3), new Pawn(2, 1),
+			new Puzzle(4, false, DFSFrontier.class, new Rook(3, 4), new Rook(1, 3), new Knight(2, 3), new Pawn(4, 3), new Pawn(1, 2),
 					new Bishop(4, 2), new Bishop(1, 1), new Knight(2, 1)),
 
 	};
