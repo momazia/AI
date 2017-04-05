@@ -1,21 +1,25 @@
 package com.marblesolitaire.test;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNull;
+import static org.junit.Assert.assertTrue;
 
 import org.junit.Test;
 
-import com.marblesolitaire.engine.Board;
+import com.marblesolitaire.engine.Engine;
+import com.marblesolitaire.engine.MarbleSolitaireState;
 
-public class TestBoard {
+public class TestEngine {
 
 	private static int DEFAULT_BOARD_SIZE = 7;
 
 	@Test
-	public void testInitiateBoard() {
-		Board board = new Board();
+	public void testCreateInitiateState() {
+		MarbleSolitaireState initialState = new Engine().createInitialState(Engine.IO_DEFAULT_TXT);
 		for (int x = 0; x < DEFAULT_BOARD_SIZE; x++) {
 			for (int y = 0; y < DEFAULT_BOARD_SIZE; y++) {
-				Boolean spot = board.getSpot(x, y);
+				Boolean spot = initialState.getSpot(x, y);
 				if ((x < 2 && y < 2) || (x < 2 && y > DEFAULT_BOARD_SIZE - 3) || (x > DEFAULT_BOARD_SIZE - 3 && y < 2)
 						|| (x > DEFAULT_BOARD_SIZE - 3 && y > DEFAULT_BOARD_SIZE - 3)) {
 					// Testing the boundaries
@@ -33,7 +37,7 @@ public class TestBoard {
 
 	@Test
 	public void testToString() {
-		Board board = new Board("./io/test/testBoard.txt");
-		assertEquals("XOX\n XO\nO O\n", board.toString());
+		MarbleSolitaireState initialState = new Engine().createInitialState("./io/test/testBoard.txt");
+		assertEquals("XOX\n XO\nO O\n", initialState.toString());
 	}
 }
