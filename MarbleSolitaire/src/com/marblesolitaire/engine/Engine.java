@@ -5,6 +5,7 @@ import java.util.List;
 public abstract class Engine {
 
 	protected Frontier<State> frontier;
+	private int visitedNodes;
 
 	/**
 	 * Uses the frontier class to create a new instance of the frontier.
@@ -15,11 +16,13 @@ public abstract class Engine {
 	 */
 	public Engine(Frontier<State> frontier) {
 		this.frontier = frontier;
+		this.visitedNodes = 0;
 	}
 
 	public State run() {
 		while (!frontier.isEmpty()) {
 			State state = frontier.pop();
+			visitedNodes++; // Incrementing the number of visited nodes.
 			if (state.isFinalState()) {
 				return state;
 			}
@@ -40,5 +43,9 @@ public abstract class Engine {
 	}
 
 	protected abstract State createInitialState();
+
+	public int getVisitedNodes() {
+		return visitedNodes;
+	}
 
 }

@@ -7,6 +7,7 @@ import static org.junit.Assert.assertTrue;
 
 import org.junit.Test;
 
+import com.marblesolitaire.engine.BFSFrontier;
 import com.marblesolitaire.engine.DFSFrontier;
 import com.marblesolitaire.engine.State;
 import com.marblesolitaire.main.MarbleSolitaireEngine;
@@ -44,15 +45,31 @@ public class TestEngine {
 	}
 
 	@Test
-	public void testRun() throws InstantiationException, IllegalAccessException {
+	public void testDFSRun() throws InstantiationException, IllegalAccessException {
 		MarbleSolitaireEngine engine = new MarbleSolitaireEngine(new DFSFrontier<>());
-		engine.setFilePath("./io/default.txt");
+		engine.setFilePath("./io/test/small.txt");
+		runAndPrint(engine);
+	}
+
+	@Test
+	public void testBFSRun() throws InstantiationException, IllegalAccessException {
+		MarbleSolitaireEngine engine = new MarbleSolitaireEngine(new BFSFrontier<>());
+		engine.setFilePath("./io/test/small.txt");
+		runAndPrint(engine);
+	}
+
+	private void runAndPrint(MarbleSolitaireEngine engine) {
 		engine.initiate();
 		State state = engine.run();
+		int finalAnswerNodes = 0;
 		do {
+			finalAnswerNodes++;
+			System.out.println(finalAnswerNodes + " -----------");
 			System.out.println(state);
-			System.out.println("-------------");
 			state = state.getPrevious();
 		} while (state.getPrevious() != null);
+		System.out.println((finalAnswerNodes + 1) + " -----------");
+		System.out.println(state);
+		System.out.println("Total visited nodes:" + engine.getVisitedNodes());
 	}
 }
