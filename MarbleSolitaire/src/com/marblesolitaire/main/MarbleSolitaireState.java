@@ -132,11 +132,11 @@ public class MarbleSolitaireState extends State {
 		for (int y = boardSize - 1; y >= 0; y--) {
 			for (int x = 0; x < boardSize; x++) {
 				if (Boolean.TRUE.equals(getSpots()[x][y])) {
-					result.append("O");
+					result.append("O ");
 				} else if (Boolean.FALSE.equals(getSpots()[x][y])) {
-					result.append(" ");
+					result.append("  ");
 				} else {
-					result.append("X");
+					result.append("X ");
 				}
 			}
 			result.append("\n");

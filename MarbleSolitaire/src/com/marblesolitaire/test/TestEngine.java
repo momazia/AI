@@ -40,7 +40,7 @@ public class TestEngine {
 	@Test
 	public void testToString() throws InstantiationException, IllegalAccessException {
 		MarbleSolitaireState initialState = new MarbleSolitaireEngine(new DFSFrontier<>()).createInitialState("./io/test/testBoard.txt");
-		assertEquals("XOX\n XO\nO O\n", initialState.toString());
+		assertEquals("X O X \n  X O \nO   O \n", initialState.toString());
 	}
 
 	@Test
@@ -48,7 +48,11 @@ public class TestEngine {
 		MarbleSolitaireEngine engine = new MarbleSolitaireEngine(new DFSFrontier<>());
 		engine.setFilePath("./io/default.txt");
 		engine.initiate();
-		State finalState = engine.run();
-		System.out.println(finalState);
+		State state = engine.run();
+		do {
+			System.out.println(state);
+			System.out.println("-------------");
+			state = state.getPrevious();
+		} while (state.getPrevious() != null);
 	}
 }
