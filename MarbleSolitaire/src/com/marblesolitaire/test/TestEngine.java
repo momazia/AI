@@ -64,11 +64,11 @@ public class TestEngine {
 		int finalAnswerNodes = 0;
 		do {
 			finalAnswerNodes++;
-			System.out.println(finalAnswerNodes + " -----------");
+			System.out.println(String.format("%-3s------", finalAnswerNodes));
 			System.out.println(state);
 			state = state.getPrevious();
 		} while (state.getPrevious() != null);
-		System.out.println((finalAnswerNodes + 1) + " -----------");
+		System.out.println(String.format("%-3s------", finalAnswerNodes));
 		System.out.println(state);
 		System.out.println("Total visited nodes:" + engine.getVisitedNodes());
 	}
