@@ -7,16 +7,18 @@ import static org.junit.Assert.assertTrue;
 
 import org.junit.Test;
 
-import com.marblesolitaire.engine.Engine;
-import com.marblesolitaire.engine.MarbleSolitaireState;
+import com.marblesolitaire.engine.DFSFrontier;
+import com.marblesolitaire.engine.State;
+import com.marblesolitaire.main.MarbleSolitaireEngine;
+import com.marblesolitaire.main.MarbleSolitaireState;
 
 public class TestEngine {
 
 	private static int DEFAULT_BOARD_SIZE = 7;
 
 	@Test
-	public void testCreateInitiateState() {
-		MarbleSolitaireState initialState = new Engine().createInitialState(Engine.IO_DEFAULT_TXT);
+	public void testCreateInitiateState() throws InstantiationException, IllegalAccessException {
+		MarbleSolitaireState initialState = new MarbleSolitaireEngine(new DFSFrontier<>()).createInitialState(MarbleSolitaireEngine.IO_DEFAULT_TXT);
 		for (int x = 0; x < DEFAULT_BOARD_SIZE; x++) {
 			for (int y = 0; y < DEFAULT_BOARD_SIZE; y++) {
 				Boolean spot = initialState.getSpot(x, y);
@@ -36,8 +38,17 @@ public class TestEngine {
 	}
 
 	@Test
-	public void testToString() {
-		MarbleSolitaireState initialState = new Engine().createInitialState("./io/test/testBoard.txt");
+	public void testToString() throws InstantiationException, IllegalAccessException {
+		MarbleSolitaireState initialState = new MarbleSolitaireEngine(new DFSFrontier<>()).createInitialState("./io/test/testBoard.txt");
 		assertEquals("XOX\n XO\nO O\n", initialState.toString());
+	}
+
+	@Test
+	public void testRun() throws InstantiationException, IllegalAccessException {
+		MarbleSolitaireEngine engine = new MarbleSolitaireEngine(new DFSFrontier<>());
+		engine.setFilePath("./io/default.txt");
+		engine.initiate();
+		State finalState = engine.run();
+		System.out.println(finalState);
 	}
 }

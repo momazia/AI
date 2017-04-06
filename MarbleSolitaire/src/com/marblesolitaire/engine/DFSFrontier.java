@@ -8,21 +8,21 @@ import java.util.Stack;
  * @author Mahdi Ziaee
  *
  */
-public class DFSFrontier implements Frontier {
+public class DFSFrontier<E extends State> implements Frontier<E> {
 
-	private Stack<MarbleSolitaireState> states;
+	private Stack<E> states;
 
 	public DFSFrontier() {
 		states = new Stack<>();
 	}
 
 	@Override
-	public MarbleSolitaireState pop() {
+	public E pop() {
 		return states.pop();
 	}
 
 	@Override
-	public void add(MarbleSolitaireState state) {
+	public void add(E state) {
 		states.push(state);
 	}
 
