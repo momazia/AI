@@ -9,10 +9,12 @@ public class MarbleSolitaireState extends State {
 
 	private Boolean[][] spots;
 	private int boardSize;
+	private int path;
 
 	public MarbleSolitaireState(int boardSize) {
 		this.boardSize = boardSize;
 		setSpots(new Boolean[boardSize][boardSize]);
+		this.setPath(0);
 	}
 
 	private MarbleSolitaireState createStateCopy() {
@@ -25,6 +27,7 @@ public class MarbleSolitaireState extends State {
 		}
 		copy.setSpots(newSpots);
 		copy.setPrevious(this.getPrevious());
+		copy.setPath(this.getPath());
 		return copy;
 	}
 
@@ -36,6 +39,7 @@ public class MarbleSolitaireState extends State {
 			newState.setSpot(x, y + 1, false); // The position above is now empty too
 			newState.setSpot(x, y + 2, true); // The marble is now occupying a new position
 			newState.setPrevious(this);
+			newState.setPath(this.getPath() + 1);
 			return newState;
 		}
 		return null;
@@ -49,6 +53,7 @@ public class MarbleSolitaireState extends State {
 			newState.setSpot(x, y - 1, false); // The position below is now empty too
 			newState.setSpot(x, y - 2, true); // The marble is now occupying a new position
 			newState.setPrevious(this);
+			newState.setPath(this.getPath() + 1);
 			return newState;
 		}
 		return null;
@@ -62,6 +67,7 @@ public class MarbleSolitaireState extends State {
 			newState.setSpot(x + 1, y, false); // The position next to the marble is now empty too
 			newState.setSpot(x + 2, y, true); // The marble is now occupying a new position
 			newState.setPrevious(this);
+			newState.setPath(this.getPath() + 1);
 			return newState;
 		}
 		return null;
@@ -75,6 +81,7 @@ public class MarbleSolitaireState extends State {
 			newState.setSpot(x - 1, y, false); // The position next to the marble is now empty too
 			newState.setSpot(x - 2, y, true); // The marble is now occupying a new position
 			newState.setPrevious(this);
+			newState.setPath(this.getPath() + 1);
 			return newState;
 		}
 		return null;
@@ -150,6 +157,15 @@ public class MarbleSolitaireState extends State {
 
 	public void setSpots(Boolean[][] spots) {
 		this.spots = spots;
+	}
+
+	@Override
+	public int getPath() {
+		return this.path;
+	}
+
+	public void setPath(int path) {
+		this.path = path;
 	}
 
 }

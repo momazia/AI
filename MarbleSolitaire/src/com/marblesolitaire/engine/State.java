@@ -7,8 +7,8 @@ public abstract class State {
 	private State previous;
 
 	public abstract boolean isFinalState();
-	
-	public abstract List<State> expand();
+
+	public abstract <E extends State> List<E> expand();
 
 	public State getPrevious() {
 		return previous;
@@ -17,4 +17,7 @@ public abstract class State {
 	public void setPrevious(State previous) {
 		this.previous = previous;
 	}
+
+	public abstract int getPath();
+
 }

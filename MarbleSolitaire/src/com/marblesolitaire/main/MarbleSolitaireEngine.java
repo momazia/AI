@@ -9,14 +9,13 @@ import java.util.stream.Collectors;
 
 import com.marblesolitaire.engine.Engine;
 import com.marblesolitaire.engine.Frontier;
-import com.marblesolitaire.engine.State;
 
-public class MarbleSolitaireEngine extends Engine {
+public class MarbleSolitaireEngine extends Engine<MarbleSolitaireState> {
 
 	public static final String IO_DEFAULT_TXT = "./io/default.txt";
 	private String filePath;
 
-	public MarbleSolitaireEngine(Frontier<State> frontier) throws InstantiationException, IllegalAccessException {
+	public MarbleSolitaireEngine(Frontier<MarbleSolitaireState> frontier) {
 		super(frontier);
 	}
 
@@ -46,7 +45,7 @@ public class MarbleSolitaireEngine extends Engine {
 	}
 
 	@Override
-	public State createInitialState() {
+	public MarbleSolitaireState createInitialState() {
 		return createInitialState(filePath);
 	}
 

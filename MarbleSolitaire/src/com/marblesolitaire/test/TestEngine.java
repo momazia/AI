@@ -10,8 +10,10 @@ import org.junit.Test;
 import com.marblesolitaire.engine.BFSFrontier;
 import com.marblesolitaire.engine.DFSFrontier;
 import com.marblesolitaire.engine.State;
+import com.marblesolitaire.main.AdjacentAStarFrontier;
 import com.marblesolitaire.main.MarbleSolitaireEngine;
 import com.marblesolitaire.main.MarbleSolitaireState;
+import com.marblesolitaire.main.ModifiedAdjacentAStarFrontier;
 
 public class TestEngine {
 
@@ -58,6 +60,27 @@ public class TestEngine {
 		runAndPrint(engine);
 	}
 
+	@Test
+	public void testAdjacentAStarRun1() throws InstantiationException, IllegalAccessException {
+		MarbleSolitaireEngine engine = new MarbleSolitaireEngine(new AdjacentAStarFrontier());
+		engine.setFilePath("./io/test/adjacent1.txt");
+		runAndPrint(engine);
+	}
+
+	@Test
+	public void testAdjacentAStarRun2() throws InstantiationException, IllegalAccessException {
+		MarbleSolitaireEngine engine = new MarbleSolitaireEngine(new AdjacentAStarFrontier());
+		engine.setFilePath("./io/test/small.txt");
+		runAndPrint(engine);
+	}
+
+	@Test
+	public void testModifiedAdjacentAStarRun1() throws InstantiationException, IllegalAccessException {
+		MarbleSolitaireEngine engine = new MarbleSolitaireEngine(new ModifiedAdjacentAStarFrontier());
+		engine.setFilePath("./io/test/small.txt");
+		runAndPrint(engine);
+	}
+
 	private void runAndPrint(MarbleSolitaireEngine engine) {
 		engine.initiate();
 		State state = engine.run();
@@ -66,10 +89,12 @@ public class TestEngine {
 			finalAnswerNodes++;
 			System.out.println(String.format("%-3s------", finalAnswerNodes));
 			System.out.println(state);
+			System.out.println("Path:" + state.getPath());
 			state = state.getPrevious();
 		} while (state.getPrevious() != null);
 		System.out.println(String.format("%-3s------", finalAnswerNodes));
 		System.out.println(state);
+		System.out.println("Path:" + state.getPath());
 		System.out.println("Total visited nodes:" + engine.getVisitedNodes());
 	}
 }

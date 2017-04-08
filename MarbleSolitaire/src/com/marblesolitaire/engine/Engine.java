@@ -2,10 +2,13 @@ package com.marblesolitaire.engine;
 
 import java.util.List;
 
-public abstract class Engine {
+public abstract class Engine<E extends State> {
 
-	protected Frontier<State> frontier;
+	protected Frontier<E> frontier;
 	private int visitedNodes;
+
+	protected Engine() {
+	}
 
 	/**
 	 * Uses the frontier class to create a new instance of the frontier.
@@ -14,14 +17,14 @@ public abstract class Engine {
 	 * @throws InstantiationException
 	 * @throws IllegalAccessException
 	 */
-	public Engine(Frontier<State> frontier) {
+	public Engine(Frontier<E> frontier) {
 		this.frontier = frontier;
 		this.visitedNodes = 0;
 	}
 
-	public State run() {
+	public E run() {
 		while (!frontier.isEmpty()) {
-			State state = frontier.pop();
+			E state = frontier.pop();
 			visitedNodes++; // Incrementing the number of visited nodes.
 			if (state.isFinalState()) {
 				return state;
@@ -31,18 +34,18 @@ public abstract class Engine {
 		return null;
 	}
 
-	private void updateFrontier(List<State> newStates) {
-		for (State state : newStates) {
+	private void updateFrontier(List<E> newStates) {
+		for (E state : newStates) {
 			frontier.add(state);
 		}
 	}
 
 	public void initiate() {
-		State initialState = createInitialState();
+		E initialState = createInitialState();
 		frontier.add(initialState);
 	}
 
-	protected abstract State createInitialState();
+	protected abstract E createInitialState();
 
 	public int getVisitedNodes() {
 		return visitedNodes;
