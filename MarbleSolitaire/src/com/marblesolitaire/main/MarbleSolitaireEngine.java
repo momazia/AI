@@ -10,6 +10,12 @@ import java.util.stream.Collectors;
 import com.marblesolitaire.engine.Engine;
 import com.marblesolitaire.engine.Frontier;
 
+/**
+ * A custom engine for Marble Solitaire puzzle.
+ * 
+ * @author Mahdi Ziaee
+ *
+ */
 public class MarbleSolitaireEngine extends Engine<MarbleSolitaireState> {
 
 	public static final String IO_DEFAULT_TXT = "./io/default.txt";
@@ -19,6 +25,13 @@ public class MarbleSolitaireEngine extends Engine<MarbleSolitaireState> {
 		super(frontier);
 	}
 
+	/**
+	 * Creates the initial state by reading the content of the file path given. 'O' represents a marble, ' ' represents an empty spot and anything
+	 * else like 'X' is the blocked spot.
+	 * 
+	 * @param boardFilePath
+	 * @return
+	 */
 	public MarbleSolitaireState createInitialState(String boardFilePath) {
 		List<String> lines = readFile(boardFilePath);
 		int boardSize = lines.size();
@@ -35,6 +48,12 @@ public class MarbleSolitaireEngine extends Engine<MarbleSolitaireState> {
 		return initialState;
 	}
 
+	/**
+	 * Read the content of the file name given line by line.
+	 * 
+	 * @param fileName
+	 * @return
+	 */
 	private List<String> readFile(String fileName) {
 		try (BufferedReader br = Files.newBufferedReader(Paths.get(fileName))) {
 			return br.lines().collect(Collectors.toList());

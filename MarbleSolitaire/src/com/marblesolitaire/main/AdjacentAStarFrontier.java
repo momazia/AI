@@ -6,10 +6,20 @@ import java.util.List;
 
 import com.marblesolitaire.engine.Frontier;
 
+/**
+ * Adjacent A Star frontier looks at each of the marbles on the board and counts the total number of adjacent marbles to each other.
+ * 
+ * @author Mahdi Ziaee
+ *
+ */
 public class AdjacentAStarFrontier implements Frontier<MarbleSolitaireState> {
 
-	private List<MarbleSolitaireState> states;
+	protected List<MarbleSolitaireState> states;
+	protected int maxHeuristicScore = -1;
 
+	/**
+	 * Default constructor.
+	 */
 	public AdjacentAStarFrontier() {
 		this.states = new LinkedList<>();
 	}
@@ -17,16 +27,23 @@ public class AdjacentAStarFrontier implements Frontier<MarbleSolitaireState> {
 	@Override
 	public MarbleSolitaireState pop() {
 		// Finding the highest score based on the adjacent nodes
-		int maxScore = -1;
+		int localMaxScore = -1;
 		MarbleSolitaireState result = null;
+		// Going through all the states
 		for (MarbleSolitaireState marbleSolitaireState : states) {
-			int score = calculateHeuristic(marbleSolitaireState) + marbleSolitaireState.getPath();
-			if (maxScore < score) {
-				maxScore = score;
+			// Calculating the state score
+			int heuristicScore = calculateHeuristic(marbleSolitaireState);
+			int score = calculateStateScore(heuristicScore, marbleSolitaireState.getPath());
+			// Finding the maximum score and the state having such score
+			if (localMaxScore < score) {
+				localMaxScore = score;
 				result = marbleSolitaireState;
 			}
+			if (maxHeuristicScore < heuristicScore) {
+				maxHeuristicScore = heuristicScore;
+			}
 		}
-		// Removing the state from the list
+		// Removing the state with maximum score from the list and returning it
 		Iterator<MarbleSolitaireState> iterator = states.iterator();
 		while (iterator.hasNext()) {
 			MarbleSolitaireState item = iterator.next();
@@ -38,6 +55,24 @@ public class AdjacentAStarFrontier implements Frontier<MarbleSolitaireState> {
 		return null;
 	}
 
+	/**
+	 * Calculating the score by adding the heuristic score to the path cost.
+	 * 
+	 * @param heuristicScore
+	 * @param path
+	 * @return
+	 */
+	protected int calculateStateScore(int heuristicScore, int path) {
+		return heuristicScore + path;
+	}
+
+	/**
+	 * Calculates the heuristic score of the given state by counting the total number of adjacent marbles to each of the marbles on the board. The
+	 * higher the score, the more marbles are next to each other.
+	 * 
+	 * @param marbleSolitaireState
+	 * @return
+	 */
 	public int calculateHeuristic(MarbleSolitaireState marbleSolitaireState) {
 		int result = 0;
 		int boardSize = marbleSolitaireState.getBoardSize();
