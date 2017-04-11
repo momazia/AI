@@ -1,5 +1,6 @@
 package com.marblesolitaire.main;
 
+import java.util.Arrays;
 import java.util.List;
 
 import com.marblesolitaire.engine.CustomArrayList;
@@ -229,6 +230,38 @@ public class MarbleSolitaireState extends State {
 
 	public void setPath(int path) {
 		this.path = path;
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see java.lang.Object#hashCode()
+	 */
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + Arrays.deepHashCode(spots);
+		return result;
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see java.lang.Object#equals(java.lang.Object)
+	 */
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (!(obj instanceof MarbleSolitaireState))
+			return false;
+		MarbleSolitaireState other = (MarbleSolitaireState) obj;
+		if (!Arrays.deepEquals(spots, other.spots))
+			return false;
+		return true;
 	}
 
 }

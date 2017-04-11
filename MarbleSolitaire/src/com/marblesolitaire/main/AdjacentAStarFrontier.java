@@ -1,13 +1,16 @@
 package com.marblesolitaire.main;
 
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Set;
 
 import com.marblesolitaire.engine.Frontier;
 
 /**
- * Adjacent A Star frontier looks at each of the marbles on the board and counts the total number of adjacent marbles to each other.
+ * Adjacent A Star frontier looks at each of the marbles on the board and counts the total number of adjacent marbles to
+ * each other.
  * 
  * @author Mahdi Ziaee
  *
@@ -15,6 +18,7 @@ import com.marblesolitaire.engine.Frontier;
 public class AdjacentAStarFrontier implements Frontier<MarbleSolitaireState> {
 
 	protected List<MarbleSolitaireState> states;
+	protected Set<MarbleSolitaireState> visitedStates;
 	protected int maxHeuristicScore = -1;
 
 	/**
@@ -22,6 +26,7 @@ public class AdjacentAStarFrontier implements Frontier<MarbleSolitaireState> {
 	 */
 	public AdjacentAStarFrontier() {
 		this.states = new LinkedList<>();
+		this.visitedStates = new HashSet<>();
 	}
 
 	@Override
@@ -31,16 +36,18 @@ public class AdjacentAStarFrontier implements Frontier<MarbleSolitaireState> {
 		MarbleSolitaireState result = null;
 		// Going through all the states
 		for (MarbleSolitaireState marbleSolitaireState : states) {
-			// Calculating the state score
-			int heuristicScore = calculateHeuristic(marbleSolitaireState);
-			int score = calculateStateScore(heuristicScore, marbleSolitaireState.getPath());
-			// Finding the maximum score and the state having such score
-			if (localMaxScore < score) {
-				localMaxScore = score;
-				result = marbleSolitaireState;
-			}
-			if (maxHeuristicScore < heuristicScore) {
-				maxHeuristicScore = heuristicScore;
+			// Calculating the state score for those states we have not visited yet
+			if (!visitedStates.contains(marbleSolitaireState)) {
+				int heuristicScore = calculateHeuristic(marbleSolitaireState);
+				int score = calculateStateScore(heuristicScore, marbleSolitaireState.getPath());
+				// Finding the maximum score and the state having such score
+				if (localMaxScore < score) {
+					localMaxScore = score;
+					result = marbleSolitaireState;
+				}
+				if (maxHeuristicScore < heuristicScore) {
+					maxHeuristicScore = heuristicScore;
+				}
 			}
 		}
 		// Removing the state with maximum score from the list and returning it
@@ -49,6 +56,7 @@ public class AdjacentAStarFrontier implements Frontier<MarbleSolitaireState> {
 			MarbleSolitaireState item = iterator.next();
 			if (item.equals(result)) {
 				iterator.remove();
+				visitedStates.add(result);
 				return result;
 			}
 		}
@@ -67,8 +75,8 @@ public class AdjacentAStarFrontier implements Frontier<MarbleSolitaireState> {
 	}
 
 	/**
-	 * Calculates the heuristic score of the given state by counting the total number of adjacent marbles to each of the marbles on the board. The
-	 * higher the score, the more marbles are next to each other.
+	 * Calculates the heuristic score of the given state by counting the total number of adjacent marbles to each of the
+	 * marbles on the board. The higher the score, the more marbles are next to each other.
 	 * 
 	 * @param marbleSolitaireState
 	 * @return
@@ -103,7 +111,9 @@ public class AdjacentAStarFrontier implements Frontier<MarbleSolitaireState> {
 
 	@Override
 	public void add(MarbleSolitaireState state) {
-		states.add(state);
+		if (!visitedStates.contains(state)) {
+			states.add(state);
+		}
 	}
 
 	@Override

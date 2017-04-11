@@ -25,6 +25,8 @@ public class MainApplication {
 		runGame(new DFSFrontier<MarbleSolitaireState>());
 		// Breadth First Search Frontier
 		runGame(new BFSFrontier<MarbleSolitaireState>());
+		// Adjacent A* Frontier
+		runGame(new AdjacentAStarFrontier());
 		// Modified Adjacent A* Frontier
 		runGame(new ModifiedAdjacentAStarFrontier());
 	}
@@ -66,7 +68,8 @@ public class MainApplication {
 	}
 
 	/**
-	 * Goes through the result in reverse order from the solution node back to the root and puts the final result into a stack.
+	 * Goes through the result in reverse order from the solution node back to the root and puts the final result into a
+	 * stack.
 	 * 
 	 * @param finalState
 	 * @return
